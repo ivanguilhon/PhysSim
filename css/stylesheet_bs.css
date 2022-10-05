@@ -1,0 +1,150 @@
+#header
+{
+    height: 150px;
+    width: 100%;
+    background-color: #34996f;
+    background:url('../files/nivelOlimpico.png') no-repeat;
+    background-position: center;
+    margin:0px;
+    padding:0px;
+}
+
+
+
+
+
+
+#header-stuff {
+    padding-bottom: 0px;
+    margin-bottom: 20px;
+    margin-right: 50px;
+    float:right;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: #fff;
+}
+
+#site-name {
+    float:left;
+    height: 40px;
+    padding-top: 15px;
+    margin-bottom: 10px;
+    clear: both;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    color: #fff;
+    font-size: 2.5em;
+    font-weight:bold;
+    text-shadow:1px 1px #555;
+}
+
+#site-slogan {
+    height: 40px;
+    float:left;
+    clear: both;
+    padding-top: 5px;
+    font-size: 1.5em;
+    /* font-variant:small-caps; */
+    text-transform: none;
+    font-weight:bold;
+}
+
+
+/* Remove the navbar's default margin-bottom and rounded borders */
+.navbar {
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+/* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+.row.content {height: 450px}
+
+/* Set gray background color and 100% height */
+.sidenav {
+  padding-top: 20px;
+  background-color: #f1f1f1;
+  height: 100%;
+}
+
+/* Set black background color, white text and some padding */
+#footer {
+  background-color: #555;
+  color: white;
+  padding: 6px;
+  margin: 0px;
+}
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) {
+  .sidenav {
+    height: auto;
+    padding: 15px;
+  }
+  .row.content {height:auto;}
+}
+
+/*
+.question_content {
+    padding: 20px 20px;
+}
+
+.base_text_content {
+    padding: 20px 20px;
+}
+*/
+
+.custom_sm_btn {
+    width: 80px !important;
+}
+
+/* tabela de correção pré BS */
+
+table.correction_block {
+    width: 100%;
+}
+th.correction_block, td.correction_block, table.correction_block {
+    border: none;
+    border-collapse: collapse;
+    padding: 0 10px 0 10px;
+}
+
+
+tr.correction_block {
+  background-color: #dddddd;
+}
+
+
+th.correction_block {
+    height: 40px;
+}
+
+/* top right bottom left */
+td.correction_fill, th.correction_fill {
+    background-color: #ffffff;
+    border: solid 1px;
+    padding: 0px 12px 0px 6px;
+}
+
+/* numeração a,b,c,... das partes de um item com múltiplas questões (partes) */
+
+/* div.question_content_has_parts { counter-reset: part_counter} */
+
+div.question_content_has_parts div.question {
+    border-bottom: groove 4px #AAAAAA;
+    margin-bottom: 12px;
+    padding: 12px;
+}
+
+/*
+div.question_content_has_parts div.question:before {
+    content: "\A0"counter(part_counter,lower-latin)"\A0";
+    display: inline-block;
+    float:left;
+    margin-right:8px;
+    border: 2px solid black;
+    padding: 40 px;
+    border-radius: 6px;
+    background-color: #EEEEEE;
+    font-family: sans-serif, Arial, Helvetica;
+    font-size: 1.2em;
+    counter-increment: part_counter;
+}
+*/
