@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <link  href="./style.css" rel="stylesheet" >
+  <meta charset="utf-8">
+  <title>Lançamento balítico</title>
+
+</head>
+
+
+
+<h1>
+Lançamento oblíquo
+</h1>
+
+<div style="width:600px; margin-left:auto; margin-right:auto; position:relative;">
+<img src="scenario.png" width="600" height="300" style="position:absolute;">
+<img src="canhao.png" width="60" height="45" style="position:absolute; left: 50px; top: 230px">
+
+
+
+
+<canvas id="trailCanvas"  >
+  Canvas not supported; please update your browser.
+</canvas>
+<canvas id="theCanvas" width="600" height="300" >
+Canvas not supported; please update your browser.
+</canvas>
+
+  <div>
+   Velocidade inicial = <span id="speedReadout">50</span> m/s <input type="range" id="speedSlider" min="0" max="70" step="1" value="50"
+            oninput="showSpeed();" onchange="showSpeed();">
+  <br>
+  Ângulo de lançamento = <span id="angleReadout">45</span> o <input type="range" id="angleSlider" min="0" max="70" step="1" value="45"
+                     oninput="showAngle();" onchange="showAngle();">
+
+     <br>
+     <input type="button" value="Fire!" class="Fire"  onclick="fireProjectile();" >
+
+  </div><!--End of buttons -->
+</div> <!--End of Simulation space -->
+
+
+<script src="myCannon.js"></script>
+
+
+
+<footer>
+<p>Simulação desenvolvido pelo prof. Ivan Guilhon. Todos os direitos reservados.
+  <br>Site:
+<a href="http://books.google.com/books?id= DXE9AAAAcAAJ"> www.ivanguilhon.com.br</a>.</p>
+</footer>
+
+
+</body>
+</html>
