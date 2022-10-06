@@ -21,18 +21,32 @@
 
 </head>
 
+<header  id="header">
+  <div class="container-fluid">
+    <div class="header">
+
+        <p id="site-name" >  Simulações de Física </p>
+        <p id="site-slogan" > Para fins de estudo </p>
+    </div> <!-- end of header*/ -->
+  </div>  <!--end of header container*/-->
+
+</header>
 
 
-<h1>
+
+
+
+
+<h2>
 Lançamento oblíquo
-</h1>
+</h2>
 
 <div style="width:600px; margin-left:auto; margin-right:auto; position:relative;">
 <img src="scenario2.png" width="100%" height="300" style="position:absolute; background-repeat: repeat-x;">
 <img src="canhao.png" width="60" height="45" style="position:absolute; left: 50px; top: 230px">
 
 
-
+<div id='simulation' class="container">
 
 <canvas id="trailCanvas"  >
   Canvas not supported; please update your browser.
@@ -40,32 +54,44 @@ Lançamento oblíquo
 <canvas id="theCanvas" width="600" height="300" >
 Canvas not supported; please update your browser.
 </canvas>
+
+  <div>
+   Velocidade inicial = <span id="speedReadout">50</span> m/s <input type="range" id="speedSlider" min="0" max="70" step="1" value="50"
+            oninput="showSpeed();" onchange="showSpeed();">
+  <br>
+  Ângulo de lançamento = <span id="angleReadout">45</span><sup>o</sup> <input type="range" id="angleSlider" min="0" max="90" step="1" value="45"
+                     oninput="showAngle();" onchange="showAngle();">
+
+     <br>
+     <input class="customButton" type="button" value="Fire!" class="Fire"  onclick="fireProjectile();" >
+
+  </div><!--End of buttons -->
 </div> <!--End of Simulation space -->
-
-<div>
-  Velocidade inicial = <span id="speedReadout">50</span> m/s <input type="range" id="speedSlider" min="0" max="70" step="1" value="50"
-           oninput="showSpeed();" onchange="showSpeed();">
- <br>
- Ângulo de lançamento = <span id="angleReadout">45</span> o <input type="range" id="angleSlider" min="0" max="70" step="1" value="45"
-                    oninput="showAngle();" onchange="showAngle();">
-
-    <br>
-    <input type="button" value="Fire!" class="Fire"  onclick="fireProjectile();" >
- </div><!--End of buttons --> 
 
 
 
 <script  src="./js/myCannon.js"></script>
 
-<div id="footer" style="margin-top:22px; width:100%;">
+</div><!--End of Simulation  -->
 
-<footer  class="container-fluid text-center" style="padding-top:10px">
-<p>Simulação desenvolvida por Ivan Guilhon para fins de estudo. Todos os direitos reservados.
-  <br>Site:
-<a href="http://books.google.com/books?id= DXE9AAAAcAAJ"> www.ivanguilhon.com.br</a>. Fim.</p>
+
+
+<footer class="panel-footer">
+  <div class="container">
+    <div class="row">
+      <section  class="col-sm-6 text-center">
+        Site: <a href="www.ivanguilhon.com.br"> www.ivanguilhon.com.br</a> <br>
+        <hr class="visible-xs">
+      </section>
+      <section id="instagram" class="col-sm-6 text-center">
+      Instagram: <a href="https://www.instagram.com/prof.ivanguilhon/J">    @prof.ivanguilhon </a>
+        <hr class="visible-xs">
+      </section>
+    </div>
+
+    <div class="text-center" style="margin-top:20px;"> Simulação desenvolvida por Ivan Guilhon para fins de estudo. Todos os direitos reservados.</div>
+  </div>
 </footer>
-</div>
-
 
 
 
