@@ -1,7 +1,9 @@
   // JavaScript code goes here.
 
   //GLOBAL VARIABLES
-  var x,y,vx,vy,ax,ay,theta; //pos e velocity
+  var x = 1;
+  var y = -29;
+  var vx,vy,ax,ay,theta; //pos e velocity
   var timer
   var g = 9.81;
   var viscosity=0;
@@ -11,11 +13,20 @@
   var angleSlider = document.getElementById("angleSlider");
   var angleReadout = document.getElementById("angleReadout");
 
-
+  var gridSelector=document.getElementById("boolGrid");
 
   var dt =0.1;
 
 
+  //CANVAS IMPORTS
+  var trailCanvas = document.getElementById("trailCanvas");
+  var trailContext = trailCanvas.getContext("2d");
+
+  var theCanvas = document.getElementById("theCanvas");
+  var theContext = theCanvas.getContext("2d");
+
+  var gridCanvas = document.getElementById("gridCanvas");
+  var gridContext = gridCanvas.getContext("2d");
 
 
   //AUX functionS
@@ -29,8 +40,9 @@
 
   //ATIRA O PROJETIL
   function fireProjectile() {
+    console.log('Fire!')
     window.clearTimeout(timer);
-    x = 1;
+    x = 0;
     y = -29;
     v =  Number(speedSlider.value);
     theta=Number(angleSlider.value)*Math.PI/180.0;
@@ -43,14 +55,13 @@
 
 //move o projetil
   function moveProjectile() {
-
     if (y>-30){
       ax=0;
       ay=-g;
       vx += ax * dt;
       vy += ay * dt;
-      x += vx * dt;
-      y += vy * dt;
+      x += vx * dt +0.5*ax*dt*dt;
+      y += vy * dt +0.5*ay*dt*dt;
       drawProjectile(x,y);
       timer=window.setTimeout(moveProjectile, 10);
       }
@@ -64,6 +75,9 @@
     var pixelX = 95 + x/metersPerPixel;
     var pixelY = 220 - y/metersPerPixel;
 
+    gridContext.fillStyle = "rgba(0, 0, 0, 1)";
+    trailContext.fillRect(pixelX-0.5, pixelY-0.5, 1, 1);
+
     //trailContext.fillRect(pixelX-0.5, pixelY-0.5, 1, 1);
     theContext.clearRect(0, 0, theCanvas.width, theCanvas.height);
     theContext.beginPath();
@@ -72,22 +86,44 @@
     //theContext.fillStyle = "red"; //preenchimento solido
     var theGradient = theContext.createRadialGradient(
     pixelX-1, pixelY-2, 1, pixelX, pixelY, 5);
-    theGradient.addColorStop(0, "#ffd0d0");
-    theGradient.addColorStop(1, "#ff0000");
+    theGradient.addColorStop(0, "#d0d0d0");
+    theGradient.addColorStop(1, "#000000");
     theContext.fillStyle = theGradient;
     theContext.fill();
   }
 
 
+//PREPARING CANVASGRID
+gridContext.fillStyle = "rgba(220, 220, 220, 0.2)";
+gridContext.fillRect(0, 0, gridCanvas.width, gridCanvas.height);
+gridContext.lineWidth = 1;
+w=600;
+h=300;
+for (xgrid=0; xgrid<= 600; xgrid+=20){
+  for (ygrid=10; ygrid<= 300; ygrid+=20){
+    gridContext.moveTo(0, ygrid);
+    gridContext.lineTo(600, ygrid);
+    gridContext.stroke();
+    gridContext.moveTo(xgrid, 0);
+    gridContext.lineTo(xgrid, 300);
+    gridContext.stroke();
+  }
+}
+
+function drawGrid(){
+  drawBool=gridSelector.checked;
+  if (drawBool){
+    gridCanvas.removeAttribute("hidden");
+  }else {
+    gridCanvas.setAttribute("hidden", "hidden");
+  }
+}
+
+function clearTrail(){
+  trailContext.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+  theContext.clearRect(0, 0, theCanvas.width, theCanvas.height);
+}
 
 
 
-//MAIN CODE
-var trailCanvas = document.getElementById("trailCanvas");
-var trailContext = trailCanvas.getContext("2d");
-
-var theCanvas = document.getElementById("theCanvas");
-var theContext = theCanvas.getContext("2d");
-
-  drawProjectile(0,0);
-//moveProjectile()
+//drawProjectile();

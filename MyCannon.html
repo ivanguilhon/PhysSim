@@ -5,19 +5,19 @@
   <meta charset="utf-8">
   <title>Lançamento oblíquo</title>
 
-<link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="./css/bootstrap-select.min.css">
-<link rel="stylesheet" type="text/css" href="./css/stylesheet_bs.css">
+<link rel="stylesheet"  type="text/css" href="./css/bootstrap.css">
 
-<link  href="./css/style.css" rel="stylesheet" >
+<link rel="stylesheet"  type="text/css" href="./css/stylesheet_bs.css">
+<link rel="stylesheet" type="text/css" href="./css/bootstrap-select.min.css">
+
 
 
 
 <script src="./js/jquery.js"></script>
 <script src="./js/bootstrap.js"></script>
 <script src="./js/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="./js/paper.js"></script>
 
+<link  href="./css/style.css" rel="stylesheet" >
 
 </head>
 
@@ -42,28 +42,62 @@ Lançamento oblíquo
 </h2>
 
 <div style="width:600px; margin-left:auto; margin-right:auto; position:relative;">
-<img src="scenario2.png" width="100%" height="300" style="position:absolute; background-repeat: repeat-x;">
-<img src="canhao.png" width="60" height="45" style="position:absolute; left: 50px; top: 230px">
+<img class="simScenario" src="scenario2.png" width="100%" height="300px" >
+<img id="simCannon" src="canhao.png" width="60" height="45" >
 
 
-<div id='simulation' class="container">
-
-<canvas id="trailCanvas"  >
+<canvas class="canvas" id="trailCanvas"  width="600" height="300" >
   Canvas not supported; please update your browser.
 </canvas>
-<canvas id="theCanvas" width="600" height="300" >
+<canvas class="canvas" id="gridCanvas" width="600" height="300" hidden="hidden">
+Canvas not supported; please update your browser.
+</canvas>
+<canvas class="canvas" id="theCanvas" width="600" height="300">
 Canvas not supported; please update your browser.
 </canvas>
 
-  <div>
-   Velocidade inicial = <span id="speedReadout">50</span> m/s <input type="range" id="speedSlider" min="0" max="70" step="1" value="50"
-            oninput="showSpeed();" onchange="showSpeed();">
-  <br>
-  Ângulo de lançamento = <span id="angleReadout">45</span><sup>o</sup> <input type="range" id="angleSlider" min="0" max="90" step="1" value="45"
-                     oninput="showAngle();" onchange="showAngle();">
 
-     <br>
-     <input class="customButton" type="button" value="Fire!" class="Fire"  onclick="fireProjectile();" >
+    <div class="row">
+      <div class="simInput simParamSlider col-sm-5 text-center">
+       Velocidade inicial = <span id="speedReadout">50</span> m/s <input type="range" id="speedSlider" min="0" max="70" step="1" value="50"
+                oninput="showSpeed();" onchange="showSpeed();">
+      </div> <!-- SPEED BUTTON-->
+      <hr class="visible-xs">
+      <div class="simInput simParamSlider col-sm-5 text-center">
+        Ângulo de lançamento = <span id="angleReadout">45</span><sup>o</sup> <input type="range" id="angleSlider" min="0" max="90" step="1" value="45"
+                           oninput="showAngle();" onchange="showAngle();">
+      </div><!-- ANGLE BUTTON-->
+      <hr class="visible-xs">
+      <div class="simInput simParamSlider col-sm-5 text-center">
+        Raio = <span id="radiusReadout">45</span> cm <input type="range" id="radiusSlider" min="0" max="30" step="1" value="5"
+                           oninput="showAngle();" onchange="showAngle();">
+      </div><!-- radius BUTTON-->
+      <hr class="visible-xs">
+      <div class="simInput simParamSlider col-sm-5 text-center">
+      Viscosidade=<input type="number" id="viscInput" min="0" max="10000"  value="1.81"
+                         oninput="showAngle();" onchange="showAngle();">10<sup>-5</sup>Pa.s
+    </div><!-- radius BUTTON-->
+    <hr class="visible-xs">
+    <div class="simInput col-sm-5 text-center">
+      <input type="checkbox" id="boolGrid" name="boolGrid"  value="on" onclick="drawGrid();" >
+    <label for="drawGrid"> Mostrar escala</label>
+  </div><!-- GRID BUTTON-->
+
+  <hr class="visible-xs">
+  <div class="simInput col-sm-5 text-center">
+    <input class="customButton" type="button" value="Limpar"  onclick="clearTrail();" >
+  </div><!-- GRID BUTTON-->
+
+  <hr class="visible-xs">
+  <div class="simInput col-sm-12 text-center">
+         <input class="customButton Fire" type="button" value="Fire!"  onclick="fireProjectile();" >
+  </div><!-- fire BUTTON-->
+
+
+    </div>    <!--End of row -->
+ </div>    <!--End of buttons -->
+
+
 
   </div><!--End of buttons -->
 </div> <!--End of Simulation space -->
@@ -81,12 +115,12 @@ Canvas not supported; please update your browser.
     <div class="row">
       <section  class="col-sm-6 text-center">
         Siga-me:
-        <a href="https://www.instagram.com/prof.ivanguilhon/J">    <img src='./files/instagram.png' height=30px> </a>
-        <a href="https://www.youtube.com/channel/UCP3ih3EY-FGttBFxUIC_mMw">    <img src='./files/youtube.png' height=30px> </a>
-        <a href="https://www.facebook.com/nivel.olimpico/">    <img src='./files/facebook.png' height=30px> </a>
+        <a class="footer-buttom" href="https://www.instagram.com/prof.ivanguilhon/J">    <img src='./files/instagram.png' height=30px> </a>
+        <a class="footer-buttom" href="https://www.youtube.com/channel/UCP3ih3EY-FGttBFxUIC_mMw">    <img src='./files/youtube.png' height=30px> </a>
+        <a class="footer-buttom" href="https://www.facebook.com/nivel.olimpico/">    <img src='./files/facebook.png' height=30px> </a>
         <br>Site:
 
-        <a href="www.ivanguilhon.com.br"> www.ivanguilhon.com.br</a> <br>
+        <a class="footer-buttom" href="www.ivanguilhon.com.br"> www.ivanguilhon.com.br</a> <br>
         <hr class="visible-xs">
       </section>
       <section  class="col-sm-6 text-center">

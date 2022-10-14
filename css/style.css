@@ -11,6 +11,7 @@
   margin-top: 15px;
   color:white;
   float:right;
+
 }
 
 #header{
@@ -19,7 +20,7 @@
 
 body {
   font-family: Arial,Helvetica,sans-serif;
-  font-size:180%;
+  font-size:120%;
   margin-left:auto;
   margin-right:auto;
   background-color:#e0e0e0;
@@ -29,51 +30,75 @@ h2 {
   /*border: 3px solid coral;*/
   font-family: 'Playfair Display',serif;
   color: black;
-  font-size:1.6em ;
+  font-size:1.5em ;
   text-align: center;
+  margin:10px;
 }
 
-.panel-footer{
-  margin-top: 20px;
-  background-color: #191919;
+  /* SIMULACAO*/
+.simScenario{
+  position:absolute;
+  padding:0px;
+  opacity: 1;
+  z-index: -1;
 }
 
-.panel-footer div{
-  color: white;
+#simCannon{
+  position:absolute;
+  left: 50px;
+  top: 230px ;
+  z-index: 1;
 }
 
-p {
-  padding: 20px;
+  #simulation{
+    position: relative;
+  }
+
+#thecanvas{
+     position:absolute;
+     z-index: 3;
+  }
+  #gridCanvas{
+       position:absolute;
+       z-index: 0;
+  }
+  #trailCanvas{
+         position:absolute;
+         z-index: 4;
+  }
+
+
+
+
+.simParamSlider{
+  border: 0px;
+  margin: 5px;
+  box-sizing: content-box-box;
+  font-size:0.9em ;
+  text-align: center;
+
+}
+
+.simInput{
+  margin-top: 5px;
+  font-size: 0.7em;
 }
 
 
-#trailCanvas{
-   width:500 px;
-   height:500 px ;
-   position:absolute;
+
+#viscInput{
+  width: 60px;
 }
 
-#theCanvas{
-   width:500 px;
-   height:500 px ;
-   position:relative;
+input[type="range"] {
+width: 80%;
+padding: 0px;
+}
+input[type="range"]::-ms-tooltip {
+display: none;
+
 }
 
-
-
-
-.Fire{
-  color: black;
-  font-size: 30 px;
-  background: lightgray;
-  margin: 0 auto 0;
-}
-
-.Fire:active{
-  color: black;
-  background: red;
-
-}
 
 .customButton { /* style a link as a push-button */
 display: inline-block;
@@ -103,24 +128,44 @@ background: -webkit-linear-gradient(#909090,#808080,#808080,#707070);
 background: linear-gradient(#909090,#808080,#808080,#707070);
 }
 
-input[type="range"] {
-width: 300px;
-padding: 0px;
-}
-input[type="range"]::-ms-tooltip {
-display: none;
 
+
+/*FOOTER;*/
+
+.panel-footer{
+  margin-top: 20px;
+  background-color: #191919;
+  font-size: 0.8em;
 }
 
+.panel-footer div{
+  margin-top: 10px;
+  color: white;
+}
+
+.footer-buttom{
+  text-decoration: none;
+  color: white;
+}
+
+p {
+  padding: 20px;
+}
 
 
 /* MEDIA QUERY */
-@media only screen and (max-width: 650px) {
+@media only screen and (max-width: 760px) {
   #site-name{
-    font-size: 2em;
+    font-size: 1.7em;
   }
 
   #site-slogan{
-    font-size: 1.5em;
+    font-size: 1.2em;
+  }
+}
+
+@media (min-width: 760px){
+  .visible-xs{
+    display: none;
   }
 }
