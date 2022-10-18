@@ -19,6 +19,7 @@
 
 
   //CANVAS IMPORTS
+  var scenario = document.getElementById("scenario");
   var trailCanvas = document.getElementById("trailCanvas");
   var trailContext = trailCanvas.getContext("2d");
 
@@ -43,7 +44,7 @@
     console.log('Fire!')
     window.clearTimeout(timer);
     x = 0;
-    y = -29;
+    y = -29.9;
     v =  Number(speedSlider.value);
     theta=Number(angleSlider.value)*Math.PI/180.0;
     var cos=Math.cos(theta);
@@ -76,7 +77,7 @@
     var pixelY = 220 - y/metersPerPixel;
 
     gridContext.fillStyle = "rgba(0, 0, 0, 1)";
-    trailContext.fillRect(pixelX-0.5, pixelY-0.5, 1, 1);
+    trailContext.fillRect(pixelX-0.5, pixelY-0.5, 2, 2);
 
     //trailContext.fillRect(pixelX-0.5, pixelY-0.5, 1, 1);
     theContext.clearRect(0, 0, theCanvas.width, theCanvas.height);
@@ -94,7 +95,7 @@
 
 
 //PREPARING CANVASGRID
-gridContext.fillStyle = "rgba(220, 220, 220, 0.2)";
+gridContext.fillStyle = "rgba(220, 220, 220, 0.4)";
 gridContext.fillRect(0, 0, gridCanvas.width, gridCanvas.height);
 gridContext.lineWidth = 1;
 w=600;
@@ -114,8 +115,11 @@ function drawGrid(){
   drawBool=gridSelector.checked;
   if (drawBool){
     gridCanvas.removeAttribute("hidden");
+    //scenario.setAttribute("hidden", "hidden");
+
   }else {
     gridCanvas.setAttribute("hidden", "hidden");
+    //scenario.removeAttribute("hidden");
   }
 }
 
