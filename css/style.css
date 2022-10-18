@@ -128,7 +128,14 @@ background: -webkit-linear-gradient(#909090,#808080,#808080,#707070);
 background: linear-gradient(#909090,#808080,#808080,#707070);
 }
 
-
+ #FireButtom:hover{
+  background: linear-gradient(green,darkgreen);
+  color: white
+}
+#FireButtom:active{
+ background: linear-gradient(red,darkred);
+ color: white
+}
 
 /*FOOTER;*/
 
@@ -146,6 +153,10 @@ background: linear-gradient(#909090,#808080,#808080,#707070);
 .footer-buttom{
   text-decoration: none;
   color: white;
+}
+
+.caption{
+  font-size: 0.7em;
 }
 
 p {
