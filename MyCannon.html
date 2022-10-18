@@ -42,8 +42,8 @@ Lançamento oblíquo
 </h2>
 
 <div style="width:600px; margin-left:auto; margin-right:auto; position:relative;">
-<img class="simScenario" src="scenario2.png" width="100%" height="300px" >
-<img id="simCannon" src="canhao.png" width="60" height="45" >
+<img id="scenario"  class="simScenario" src="./files/scenario3.png" width="100%" height="300px" >
+<img id="simCannon" src="./files/canhao.png" width="60" height="45" >
 
 
 <canvas class="canvas" id="trailCanvas"  width="600" height="300" >
@@ -80,7 +80,7 @@ Canvas not supported; please update your browser.
     <hr class="visible-xs">
     <div class="simInput col-sm-5 text-center">
       <input type="checkbox" id="boolGrid" name="boolGrid"  value="on" onclick="drawGrid();" >
-    <label for="drawGrid"> Mostrar escala</label>
+    <label for="drawGrid"> Mostrar escala (&#9633; =20m )</label>
   </div><!-- GRID BUTTON-->
 
   <hr class="visible-xs">
@@ -90,7 +90,7 @@ Canvas not supported; please update your browser.
 
   <hr class="visible-xs">
   <div class="simInput col-sm-12 text-center">
-         <input class="customButton Fire" type="button" value="Fire!"  onclick="fireProjectile();" >
+         <input id="FireButtom" class="customButton Fire" type="button" value="Fogo!"  onclick="fireProjectile();" >
   </div><!-- fire BUTTON-->
 
 
@@ -113,21 +113,24 @@ Canvas not supported; please update your browser.
 <footer class="panel-footer">
   <div class="container">
     <div class="row">
-      <section  class="col-sm-6 text-center">
-        Siga-me:
-        <a class="footer-buttom" href="https://www.instagram.com/prof.ivanguilhon/J">    <img src='./files/instagram.png' height=30px> </a>
-        <a class="footer-buttom" href="https://www.youtube.com/channel/UCP3ih3EY-FGttBFxUIC_mMw">    <img src='./files/youtube.png' height=30px> </a>
-        <a class="footer-buttom" href="https://www.facebook.com/nivel.olimpico/">    <img src='./files/facebook.png' height=30px> </a>
-        <br>Site:
+      <section  class="col-sm-4 text-center">
 
-        <a class="footer-buttom" href="www.ivanguilhon.com.br"> www.ivanguilhon.com.br</a> <br>
-        <hr class="visible-xs">
-      </section>
-      <section  class="col-sm-6 text-center">
-
-  <div class="text-center" > Simulação desenvolvida por Ivan Guilhon para fins de estudo. Todos os direitos reservados.</div>
+  <div class="text-center caption" > Simulação desenvolvida por Ivan Guilhon para fins de estudo. Todos os direitos reservados.</div>
 
       </section>
+
+      <section  class="col-sm-4 text-center">
+        <a class="footer-buttom" href="www.ivanguilhon.com.br" > www.ivanguilhon.com.br</a>
+        </section>
+        <!--<hr class="visible-xs"> -->
+
+
+        <section  class="col-sm-4 text-center">
+          <a class="footer-buttom" href="https://www.instagram.com/prof.ivanguilhon/J">    <img src='./files/instagram.png' height=30px> </a>
+          <a class="footer-buttom" href="https://www.youtube.com/channel/UCP3ih3EY-FGttBFxUIC_mMw">    <img src='./files/youtube.png' height=30px> </a>
+          <a class="footer-buttom" href="https://www.facebook.com/nivel.olimpico/">    <img src='./files/facebook.png' height=30px> </a>
+        </section>
+
     </div><!--End of row -->
   </div> <!--End of container -->
 </footer>
