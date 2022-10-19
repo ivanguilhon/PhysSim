@@ -6,7 +6,12 @@
   var vx,vy,ax,ay,theta; //pos e velocity
   var timer
   var g = 9.81;
-  var viscosity=0;
+
+  //inputs
+  var viscosity=document.getElementById("viscInput").value *0.00001;//viscosidade
+  var r=document.getElementById("radiusSlider").value *0.01;//raio
+  var k=0
+
   var speedSlider = document.getElementById("speedSlider");
   var speedReadout = document.getElementById("speedReadout");
 
@@ -30,7 +35,7 @@
   var gridContext = gridCanvas.getContext("2d");
 
 
-  //AUX functionS
+  //mostradores
   function showSpeed() {
     speedReadout.innerHTML = speedSlider.value;
   }
@@ -38,8 +43,21 @@
   function showAngle() {
     angleReadout.innerHTML = angleSlider.value;
   }
+  function showRadius() {
+    radiusReadout.innerHTML = radiusSlider.value;
+  }
+
 
   //ATIRA O PROJETIL
+  function calculateK(){
+    viscosity=document.getElementById("viscInput").value *0.00001;//viscosidade
+    r=document.getElementById("radiusSlider").value *0.01;//raio
+    rho=11300 //kg/m3 =densidade do chumbo
+    m=4*0.3333*Math.PI*r**3
+    k=6*Math.PI*viscosity*r/m
+    return k
+  }
+
   function fireProjectile() {
     console.log('Fire!')
     window.clearTimeout(timer);
@@ -57,8 +75,8 @@
 //move o projetil
   function moveProjectile() {
     if (y>-30){
-      ax=0;
-      ay=-g;
+      ax=-k*vx;
+      ay=-g-k*vy;
       vx += ax * dt;
       vy += ay * dt;
       x += vx * dt +0.5*ax*dt*dt;

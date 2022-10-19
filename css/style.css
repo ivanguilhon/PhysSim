@@ -1,3 +1,7 @@
+*{
+  box-sizing: border-box;
+}
+
 #site-name{
   text-align: right;
   font-family: 'Playfair Display',serif;
@@ -72,8 +76,7 @@ h2 {
 
 .simParamSlider{
   border: 0px;
-  margin: 5px;
-  box-sizing: content-box-box;
+  margin: 0px;
   font-size:0.9em ;
   text-align: center;
 
@@ -128,6 +131,14 @@ background: -webkit-linear-gradient(#909090,#808080,#808080,#707070);
 background: linear-gradient(#909090,#808080,#808080,#707070);
 }
 
+
+#FireButtom{
+  width: 90px;
+  height: 40px;
+  margin-top: :30px;
+  font-size: 1.2em;
+
+}
  #FireButtom:hover{
   background: linear-gradient(green,darkgreen);
   color: white
@@ -136,6 +147,36 @@ background: linear-gradient(#909090,#808080,#808080,#707070);
  background: linear-gradient(red,darkred);
  color: white
 }
+
+
+/*collapse buttomS;*/
+.colapseButton { /* style a link as a push-button */
+  display: inline-block;
+  background-color: #FACB2F;
+   color:#191919;
+   border: 0px;
+  line-height: 24px;
+  font-size: 1em;
+}
+.colapseButton:hover { /* style a link as a push-button */
+  display: inline-block;
+  background-color: #FACB2F;
+   color:#191919;
+   border: 0px;
+  line-height: 24px;
+  font-size: 1em;
+  box-shadow: 0 0 5px #191919;
+}
+
+.colapseButton:active { /* style a link as a push-button */
+  display: inline-block;
+  background-color: #FACB2F;
+   color:#191919;
+   box-shadow: 0 0 0px #191919;
+}
+
+
+
 
 /*FOOTER;*/
 
@@ -165,9 +206,9 @@ p {
 
 
 /* MEDIA QUERY */
-@media only screen and (max-width: 760px) {
+@media only screen and (max-width: 790px) {
   #site-name{
-    font-size: 1.7em;
+    font-size: 2em;
   }
 
   #site-slogan{
