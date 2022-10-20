@@ -36,7 +36,7 @@ h2 {
   color: black;
   font-size:1.5em ;
   text-align: center;
-  margin:10px;
+  margin:30px;
 }
 
   /* SIMULACAO*/
@@ -87,7 +87,9 @@ h2 {
   font-size: 0.7em;
 }
 
-
+img{
+  border-radius: 4px;
+}
 
 #viscInput{
   width: 60px;
@@ -105,10 +107,10 @@ display: none;
 
 .customButton { /* style a link as a push-button */
 display: inline-block;
-width: 60px;
-height: 30px;
+width: 90px;
+height: 40px;
 line-height: 24px;
-font-size: 1em;
+font-size: 1.2em;
 
 
 text-align: center;
@@ -149,6 +151,7 @@ background: linear-gradient(#909090,#808080,#808080,#707070);
 }
 
 
+
 /*collapse buttomS;*/
 .colapseButton { /* style a link as a push-button */
   display: inline-block;
@@ -157,6 +160,8 @@ background: linear-gradient(#909090,#808080,#808080,#707070);
    border: 0px;
   line-height: 24px;
   font-size: 1em;
+  margin-top: 30px;
+
 }
 .colapseButton:hover { /* style a link as a push-button */
   display: inline-block;
@@ -165,7 +170,7 @@ background: linear-gradient(#909090,#808080,#808080,#707070);
    border: 0px;
   line-height: 24px;
   font-size: 1em;
-  box-shadow: 0 0 5px #191919;
+  box-shadow: 0 0 2px #191919;
 }
 
 .colapseButton:active { /* style a link as a push-button */
@@ -176,12 +181,25 @@ background: linear-gradient(#909090,#808080,#808080,#707070);
 }
 
 
+/*INFORMATION;*/
+.texto{
+  margin-bottom: 15px;
+  margin-top: 15px;
+  padding: 0px;
+}
 
+.texto:nth-child(1){
+  margin-top: 0px;
+}
+
+#fno1,#fno2, #estudoeficaz {
+  height: 200 px;
+}
 
 /*FOOTER;*/
 
 .panel-footer{
-  margin-top: 20px;
+  margin-top: 00px;
   background-color: #191919;
   font-size: 0.8em;
 }
@@ -206,7 +224,7 @@ p {
 
 
 /* MEDIA QUERY */
-@media only screen and (max-width: 790px) {
+@media only screen and (max-width: 790px) and (min-width: 441px) {
   #site-name{
     font-size: 2em;
   }
@@ -214,6 +232,23 @@ p {
   #site-slogan{
     font-size: 1.2em;
   }
+}
+
+@media only screen and (max-width: 440px) {
+  #site-name{
+    font-size: 1.6em;
+  }
+
+  #site-slogan{
+    font-size: 1.2em;
+    margin-top: 5px;
+  }
+
+  #fno1,#fno2, #estudoeficaz {
+    padding: 5 px;
+  }
+
+
 }
 
 @media (min-width: 760px){
