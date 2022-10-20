@@ -20,7 +20,7 @@
 
   var gridSelector=document.getElementById("boolGrid");
 
-  var dt =0.1;
+  var dt =0.07;
 
 
   //CANVAS IMPORTS
@@ -116,6 +116,7 @@
 gridContext.fillStyle = "rgba(220, 220, 220, 0.4)";
 gridContext.fillRect(0, 0, gridCanvas.width, gridCanvas.height);
 gridContext.lineWidth = 1;
+gridContext.strokeStyle = "#303030";
 w=600;
 h=300;
 for (xgrid=0; xgrid<= 600; xgrid+=20){
@@ -146,6 +147,10 @@ function clearTrail(){
   theContext.clearRect(0, 0, theCanvas.width, theCanvas.height);
 }
 
+function changeColor(){
+  trailContext.fillStyle =  document.getElementById("trailColors").value ;
+
+}
 
 
 //drawProjectile();
