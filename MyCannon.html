@@ -27,8 +27,8 @@
   <div class="container">
     <div class="header">
 
-        <p id="site-name" >  Simulações de Física </p>
-        <p id="site-slogan" > por Prof. Ivan Guilhon </p>
+        <div id="site-name" >  Simulações de Física </div> <br>
+        <div id="site-slogan" > por Prof. Ivan Guilhon </div>
     </div> <!-- end of header*/ -->
   </div>  <!--end of header container*/-->
 
@@ -87,12 +87,18 @@ Lançamento oblíquo
 
 
   <div class="simInput col-sm-3 text-center">
-    <input class="customButton" type="button" value="Limpar"  onclick="clearTrail();" >
+      Cor: <select id="trailColors"  onchange="changeColor();" >
+          <option value="black" > Preto </option>
+          <option value="red" >Vermelho</option>
+          <option value="darkgreen" >Verde</option>
+          <option value="blue" >Azul</option>
+      </select>
   </div><!-- GRID BUTTON-->
 
 
   <div class="simInput col-12 text-center">
          <input id="FireButtom" class="customButton Fire" type="button" value="Fogo!"  onclick="fireProjectile();" >
+         <input class="customButton" type="button" value="Limpar"  onclick="clearTrail();" >
   </div><!-- fire BUTTON-->
 
 
@@ -112,37 +118,38 @@ Lançamento oblíquo
 
 <!-- collapse INFORMATION  -->
 <p>
-    <button class="btn colapseButton" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAuthor" aria-expanded="false" aria-controls="collapseExample">
+    <!--<button class="btn colapseButton" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAuthor" aria-expanded="false" aria-controls="collapseExample"> -->
+    <button class="btn colapseButton" type="button" >
       Sobre o autor
     </button>
   </p>
-  <div class="collapse" id="collapseAuthor">
+  <div  id="collapseAuthor">
     <div  class="container-fluid">
       <div  class="row">
-        <div  class="col-sm-8 caption">
-        Ivan Guilhon graduou-se em Engenharia Eletrônica no Instituto Tecnológico de Aeronáutica (ITA) no ano de 2014 com distinção Magna Cum Laude,
+        <div  class="col-md-8 caption">
+        <p class="texto">Ivan Guilhon graduou-se em Engenharia Eletrônica no Instituto Tecnológico de Aeronáutica (ITA) no ano de 2014 com distinção Magna Cum Laude,
         outorgada a alunos que atingiram alto grau de desempenho acadêmico nas disciplinas do curso de engenharia.
         Doutorou-se em Física Atômica e Molecular no ITA em 2017, aos 25 anos. O autor tem trabalhos apresentados em congressos científicos,
-        15 artigos publicados em periódicos internacionais e 3 livros publicados:
+        15 artigos publicados em periódicos internacionais e 3 livros publicados:</p>
         <div  class="container-fluid text-center">
           <div  class="row">
             <div  class="col-4">
               <a class="footer-buttom" href="https://vestseller.com.br/fisica-em-nivel-olimpico-volume-1-ivan-guilhon.html" >
-              <img id="scenario"   src="./files/fno1.png"  height="200px" >
+              <img id="fno1"   src="./files/fno1.png"  height="180px" >
               </a>
               <br>
               Física em Nível Olímpico vol.1
             </div>
             <div  class="col-4">
               <a class="footer-buttom" href="https://vestseller.com.br/fisica-em-nivel-olimpico-volume-ll-ivan-guilhon-mitoso-rocha-1374.html" >
-              <img id="scenario"   src="./files/fno2.png"  height="200px" >
+              <img id="fno2"   src="./files/fno2.png"  height="180px" >
             </a>
               <br>
               Física em Nível Olímpico vol.2
             </div>
             <div  class="col-4">
               <a class="footer-buttom" href="https://pay.hotmart.com/X72216388W?off=ned5qzpg&sck=HOTMART_PRODUCT_PAGE&bid=1656595157114" >
-              <img id="scenario"   src="./files/estudoeficaz.png"  height="200px" >
+              <img id="estudoeficaz"   src="./files/estudoeficaz.png"  height="180px" >
             </a>
               <br>
               Estudo Eficaz
@@ -154,7 +161,7 @@ Lançamento oblíquo
 
 
 
-        O autor está envolvido desde 2007 com olimpíadas científicas de Física e atualmente é professor no departamento de Física do ITA.
+        <p class="texto"> O autor está envolvido desde 2007 com olimpíadas científicas de Física e atualmente é professor no departamento de Física do ITA.</p>
         </div>
 
         <div  class="col-sm-3">
@@ -189,9 +196,9 @@ Lançamento oblíquo
 
 
         <section  class="col-sm-4 text-center">
-          <a class="footer-buttom" href="https://www.instagram.com/prof.ivanguilhon/J">    <img src='./files/instagram.png' height=30px> </a>
-          <a class="footer-buttom" href="https://www.youtube.com/channel/UCP3ih3EY-FGttBFxUIC_mMw">    <img src='./files/youtube.png' height=30px> </a>
-          <a class="footer-buttom" href="https://www.facebook.com/nivel.olimpico/">    <img src='./files/facebook.png' height=30px> </a>
+          <a class="footer-buttom" href="https://www.instagram.com/prof.ivanguilhon/J">    <img src='./files/instagram.png' height=40px> </a>
+          <a class="footer-buttom" href="https://www.youtube.com/channel/UCP3ih3EY-FGttBFxUIC_mMw">    <img src='./files/youtube.png' height=40px> </a>
+          <a class="footer-buttom" href="https://www.facebook.com/nivel.olimpico/">    <img src='./files/facebook.png' height=40px> </a>
         </section>
 
     </div><!--End of row -->
