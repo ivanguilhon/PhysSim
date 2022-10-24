@@ -62,6 +62,15 @@ h2 {
   z-index: -1;
 }
 
+#scenario{
+  z-index: -1;
+}
+
+#scenario-grid{
+  z-index: 0;
+}
+
+
 #simCannon{
   position:absolute;
   left: 50px;
@@ -77,10 +86,10 @@ h2 {
      position:absolute;
      z-index: 3;
   }
-  #gridCanvas{
+  /*#gridCanvas{
        position:absolute;
        z-index: 0;
-  }
+  }*/
   #trailCanvas{
          position:absolute;
          z-index: 4;
