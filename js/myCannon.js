@@ -31,8 +31,8 @@
   var theCanvas = document.getElementById("theCanvas");
   var theContext = theCanvas.getContext("2d");
 
-  var gridCanvas = document.getElementById("gridCanvas");
-  var gridContext = gridCanvas.getContext("2d");
+  //var gridCanvas = document.getElementById("gridCanvas");
+  //var gridContext = gridCanvas.getContext("2d");
 
 
   //mostradores
@@ -94,7 +94,7 @@
     var pixelX = 95 + x/metersPerPixel;
     var pixelY = 220 - y/metersPerPixel;
 
-    gridContext.fillStyle = "rgba(0, 0, 0, 1)";
+    //gridContext.fillStyle = "rgba(0, 0, 0, 1)";
     trailContext.fillRect(pixelX-0.5, pixelY-0.5, 2, 2);
 
     //trailContext.fillRect(pixelX-0.5, pixelY-0.5, 1, 1);
@@ -113,6 +113,7 @@
 
 
 //PREPARING CANVASGRID
+/*
 gridContext.fillStyle = "rgba(220, 220, 220, 0.4)";
 gridContext.fillRect(0, 0, gridCanvas.width, gridCanvas.height);
 gridContext.lineWidth = 1;
@@ -129,15 +130,20 @@ for (xgrid=0; xgrid<= 600; xgrid+=20){
     gridContext.stroke();
   }
 }
+*/
 
 function drawGrid(){
   drawBool=gridSelector.checked;
   if (drawBool){
-    gridCanvas.removeAttribute("hidden");
+    //gridCanvas.removeAttribute("hidden");
+    document.getElementById("scenario-grid").removeAttribute("hidden");
+    document.getElementById("scenario").setAttribute("hidden", "hidden");
     //scenario.setAttribute("hidden", "hidden");
 
   }else {
-    gridCanvas.setAttribute("hidden", "hidden");
+    //gridCanvas.setAttribute("hidden", "hidden");
+document.getElementById("scenario-grid").setAttribute("hidden", "hidden");
+    document.getElementById("scenario").removeAttribute("hidden");
     //scenario.removeAttribute("hidden");
   }
 }
