@@ -57,9 +57,14 @@ h2 {
   /* SIMULACAO*/
 .simScenario{
   position:absolute;
+  width: 600px;
   padding:0px;
   opacity: 1;
   z-index: -1;
+}
+
+.canvas{
+  width: 600px;
 }
 
 #scenario{
