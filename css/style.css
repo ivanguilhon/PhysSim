@@ -6,20 +6,35 @@
   text-align: right;
   font-family: 'Playfair Display',serif;
   color:#FACB2F;
+  font-size: 2.5em;
+  font-weight:bold;
   float:right;
+  padding-top: 15px;
+  clear: both;
+  text-shadow:1px 1px #555;
 }
 
 #site-slogan{
   text-align: right;
   font-family: 'Playfair Display',serif;
-  margin-top: 15px;
+  font-size: 1.5em;
   color:white;
+  font-weight:bold;
   float:right;
-
+  clear: both;
 }
 
-#header{
-  background-color: #191919;
+
+
+#header
+{
+    height: 150px;
+    width: 100%;
+    background-color: #191919;
+    background:url('../files/nivelOlimpico-sm.png') ;*/
+    background-position: center;
+    margin:0px;
+    padding:0px;
 }
 
 body {
@@ -92,7 +107,12 @@ img{
 }
 
 #viscInput{
+  height: 24px;
   width: 60px;
+}
+
+#trailColors{
+  height: 24px;
 }
 
 input[type="range"] {
@@ -212,6 +232,7 @@ background: linear-gradient(#909090,#808080,#808080,#707070);
 .footer-buttom{
   text-decoration: none;
   color: white;
+  text-align: center;
 }
 
 .caption{
@@ -222,6 +243,9 @@ p {
   padding: 20px;
 }
 
+.no-padding {
+    padding: 0 !important;
+}
 
 /* MEDIA QUERY */
 @media only screen and (max-width: 790px) and (min-width: 441px) {
@@ -255,4 +279,10 @@ p {
   .visible-xs{
     display: none;
   }
+
+@media (min-width: 1000px){
+    #header{
+      background-image:url('../files/nivelOlimpico.png');*/
+      background-position: center;
+    }
 }
