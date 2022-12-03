@@ -28,6 +28,26 @@ function setEigenFuncs(xmin,xmax){
 
 
 
+function findZero(func,a,b){
+  var xbot=a;
+  var xceil=b;
+  var x=0.5*(xbot+xceil);
+  var fbot=func(a);
+  var fceil=func(b);
+  var f = func(x);
+  var tol = 0.001;
+
+  if (fbot*fceil>0){ return undefined;}
+
+  while(xceil-xbot > tol){
+    if (f*fbot > 0 ){xbot=x;fbot=f;x=0.5*(xbot+xceil);f = func(x);}
+    else{xceil=x;fceil=f;x=0.5*(xbot+xceil);f = func(x);}
+  }
+  return x;
+}
+
+
+
   PsiData=[xVec,yVec1,yVec2,yVec3,yVec4,yVec5];
   return PsiData;
 }
@@ -94,12 +114,14 @@ function drawPsi(grafico,n) {
     graficoEnergy.data.datasets[n+1]={
       data: [undefined,( 0.37602/m)*(n/a)**2,( 0.37602/m)*(n/a)**2,undefined],
       borderColor: colors[n],
+      borderDash: [5, 5],
       label:"Psi"+n,
       fill: false
     } ;
     grafico.data.datasets[n]={
       data: PsiData[n],
       borderColor: colors[n],
+      borderDash: [5, 5],
       label:"Psi"+n,
       fill: false
     } ;
