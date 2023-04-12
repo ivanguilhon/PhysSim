@@ -85,6 +85,13 @@ h2 {
   z-index: 1;
 }
 
+#simTarget{
+  position:absolute;
+  left: 0px;
+  top: 100px ;
+  z-index: 1;
+}
+
   #simulation{
     position: relative;
   }
