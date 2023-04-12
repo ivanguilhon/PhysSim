@@ -61,8 +61,8 @@
   function fireProjectile() {
     console.log('Fire!')
     window.clearTimeout(timer);
-    x = 0;
-    y = -29.9;
+    x = -2;
+    y = -27.99;
     v =  Number(speedSlider.value);
     theta=Number(angleSlider.value)*Math.PI/180.0;
     var cos=Math.cos(theta);
@@ -132,6 +132,8 @@ for (xgrid=0; xgrid<= 600; xgrid+=20){
 }
 */
 
+
+
 function drawGrid(){
   drawBool=gridSelector.checked;
   if (drawBool){
@@ -159,4 +161,16 @@ function changeColor(){
 }
 
 
-//drawProjectile();
+
+function showTarget(){
+  xTarget=Math.floor(Math.random() * 450)+50;
+  yTarget=Math.floor(Math.random() * 250);
+  if(document.getElementById("simTarget").hidden){
+    document.getElementById("simTarget").removeAttribute("hidden");
+    document.getElementById("simTarget").style.left=xTarget.toString()+'px'
+    document.getElementById("simTarget").style.top=yTarget.toString()+'px'
+  }
+  else{
+    document.getElementById("simTarget").setAttribute("hidden", "hidden");
+  }
+}

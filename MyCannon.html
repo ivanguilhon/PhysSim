@@ -45,8 +45,7 @@ Lançamento oblíquo
   <img id="scenario"  class="simScenario" src="./files/scenario3.png" width="100%" height="300px" >
   <img id="scenario-grid"  class="simScenario" src="./files/scenario3-grid.png" width="100%" height="300px" hidden>
   <img id="simCannon" src="./files/canhao.png" width="60" height="45" >
-
-
+  <img id="simTarget" src="./files/alvo.png" width="35" height="35" hidden="hidden" >
   <canvas class="canvas" id="trailCanvas"  width="600" height="300" >
     Canvas not supported; please update your browser.
   </canvas>
@@ -97,6 +96,7 @@ Lançamento oblíquo
 
   <div class="simInput col-12 text-center">
          <input id="FireButtom" class="customButton Fire" type="button" value="Fogo!"  onclick="fireProjectile();" >
+         <input id="TargetButtom" class="customButton" type="button" value="Alvo"  onclick="showTarget();" >
          <input class="customButton" type="button" value="Limpar"  onclick="clearTrail();" >
   </div><!-- fire BUTTON-->
 
