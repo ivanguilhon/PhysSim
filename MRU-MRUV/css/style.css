@@ -17,21 +17,19 @@
 #site-slogan{
   text-align: right;
   font-family: 'Playfair Display',serif;
-  font-size: 1.5em;
+  font-size: 1.2em;
   color:white;
   font-weight:bold;
   float:right;
   clear: both;
 }
 
-
-
-#header
-{
+#header{
     height: 150px;
     width: 100%;
     background-color: #191919;
-    background:url('../files/nivelOlimpico-sm.png') ;*/
+    /* background:url('../files/nivelOlimpico-sm.png'); */
+    background:linear-gradient(90deg, rgba(170,163,50,1) 0%, rgba(10,10,1,1) 25%, rgba(1,0,0,1) 76%);
     background-position: left;
     margin:0px;
     padding:0px;
@@ -46,15 +44,13 @@ body {
 }
 
 h2 {
-  /*border: 3px solid coral;*/
   font-family: 'Playfair Display',serif;
   color: black;
-  font-size:1.5em ;
+  font-size:1.5em;
   text-align: center;
   margin:30px;
 }
 
-  /* SIMULACAO*/
 .simScenario{
   position:absolute;
   width: 600px;
@@ -62,7 +58,6 @@ h2 {
   opacity: 1;
   z-index: -1;
   box-shadow: 0px 0px 3px 3px rgba(150,150,150,25);
-
 }
 
 .canvas{
@@ -70,57 +65,46 @@ h2 {
 }
 
 #scenario{
-  z-index: -1;
+  z-index: -2;
 }
 
 #scenario-grid{
-  z-index: 0;
+  z-index: -1;
 }
-
 
 #simCannon{
   position:absolute;
   left: 50px;
-  top: 230px ;
+  top: 230px;
   z-index: 1;
 }
 
 #simTarget{
   position:absolute;
   left: 0px;
-  top: 100px ;
+  top: 100px;
   z-index: 1;
 }
 
-  #simulation{
+#simulation{
     position: relative;
-  }
+}
 
 #thecanvas{
      position:absolute;
      z-index: 3;
+}
 
-
-  }
-  /*#gridCanvas{
-       position:absolute;
-       z-index: 0;
-  }*/
-  #trailCanvas{
-         position:absolute;
-         z-index: 4;
-
-  }
-
-
-
+#trailCanvas{
+     position:absolute;
+     z-index: 4;
+}
 
 .simParamSlider{
   border: 0px;
   margin: 0px;
-  font-size:0.9em ;
+  font-size:0.9em;
   text-align: center;
-
 }
 
 .simInput{
@@ -142,92 +126,116 @@ img{
 }
 
 input[type="range"] {
-width: 80%;
-padding: 0px;
+  width: 80%;
+  padding: 0px;
 }
+
 input[type="range"]::-ms-tooltip {
-display: none;
-
+  display: none;
 }
 
-
-.customButton { /* style a link as a push-button */
-display: inline-block;
-width: 160px;
-height: 40px;
-line-height: 24px;
-font-size: 1.2em;
-
-
-text-align: center;
-color: black;
-background: -webkit-linear-gradient(white,#eeeeee,#eeeeee,#e0e0e0);
-background: linear-gradient(white,#eeeeee,#eeeeee,#e0e0e0);
-text-decoration: none;
-border: 1px solid gray;
-border-radius: 5px;
--webkit-user-select: none;
--moz-user-select: -moz-none;
--ms-user-select: none;
-user-select: none;
-curs or: pointer;
--webkit-tap-highlight-color: rgba(0,0,0,0);
+.customButton { 
+  display: inline-block;
+  width: 160px;
+  height: 40px;
+  line-height: 24px;
+  font-size: 1.2em;
+  text-align: center;
+  color: black;
+  background: linear-gradient(white,#eeeeee,#eeeeee,#e0e0e0);
+  text-decoration: none;
+  border: 1px solid gray;
+  border-radius: 5px;
+  user-select: none;
+  cursor: pointer;
 }
 
 .customButton:active {
-background: -webkit-linear-gradient(#909090,#808080,#808080,#707070);
-background: linear-gradient(#909090,#808080,#808080,#707070);
+  background: linear-gradient(#909090,#808080,#808080,#707070);
 }
 
+.myButtom { 
+  display: inline-block;
+  width: 160px;
+  height: 40px;
+  line-height: 24px;
+  font-size: 1.2em;
+  text-align: center;
+  color: black;
+  background: linear-gradient(white,#eeeeee,#eeeeee,#e0e0e0);
+  text-decoration: none;
+  border: 1px solid gray;
+  border-radius: 5px;
+  user-select: none;
+  cursor: pointer;
+  width: 150px;
+  height: 40px;
+}
+
+#PauseButtom { 
+  display: inline-block;
+  width: 160px;
+  height: 40px;
+  line-height: 24px;
+  font-size: 1.2em;
+  text-align: center;
+  color: black;
+  background: linear-gradient(white,#eeeeee,#eeeeee,#e0e0e0);
+  text-decoration: none;
+  border: 1px solid gray;
+  border-radius: 5px;
+  user-select: none;
+  cursor: pointer;
+}
+
+#PauseButtom:active {
+  background: linear-gradient(#909090,#808080,#808080,#707070);
+}
 
 #FireButtom{
   width: 150px;
   height: 40px;
-  margin-top: :30px;
+  margin-top: 30px;
   font-size: 1.2em;
-
 }
- #FireButtom:hover{
+
+#FireButtom:hover{
   background: linear-gradient(green,darkgreen);
-  color: white
+  color: white;
 }
+
 #FireButtom:active{
- background: linear-gradient(red,darkred);
- color: white
+  background: linear-gradient(red,darkred);
+  color: white;
 }
 
-
-
-/*collapse buttomS;*/
-.colapseButton { /* style a link as a push-button */
+.colapseButton { 
   display: inline-block;
   background-color: #FACB2F;
-   color:#191919;
-   border: 0px;
+  color:#191919;
+  border: 0px;
   line-height: 24px;
   font-size: 1em;
   margin-top: 30px;
-
 }
-.colapseButton:hover { /* style a link as a push-button */
+
+.colapseButton:hover { 
   display: inline-block;
   background-color: #FACB2F;
-   color:#191919;
-   border: 0px;
+  color:#191919;
+  border: 0px;
   line-height: 24px;
   font-size: 1em;
   box-shadow: 0 0 2px #191919;
 }
 
-.colapseButton:active { /* style a link as a push-button */
+.colapseButton:active { 
   display: inline-block;
   background-color: #FACB2F;
-   color:#191919;
-   box-shadow: 0 0 0px #191919;
+  color:#191919;
+  box-shadow: 0 0 0px #191919;
 }
 
-
-/*INFORMATION;*/
 .texto{
   margin-bottom: 15px;
   margin-top: 15px;
@@ -239,13 +247,11 @@ background: linear-gradient(#909090,#808080,#808080,#707070);
 }
 
 #fno1,#fno2, #estudoeficaz {
-  height: 200 px;
+  height: 200px;
 }
 
-/*FOOTER;*/
-
 .panel-footer{
-  margin-top: 00px;
+  margin-top: 0px;
   height: 50px;
   background-color: #191919;
   font-size: 0.8em;
@@ -274,7 +280,6 @@ p {
     padding: 0 !important;
 }
 
-/* MEDIA QUERY */
 @media only screen and (max-width: 790px) and (min-width: 441px) {
   #site-name{
     font-size: 2em;
@@ -296,20 +301,52 @@ p {
   }
 
   #fno1,#fno2, #estudoeficaz {
-    padding: 5 px;
+    padding: 5px;
   }
-
-
 }
 
 @media (min-width: 760px){
   .visible-xs{
     display: none;
   }
+}
 
-@media (min-width: 1000px){
-    #header{
-      background-image:url('../files/nivelOlimpico.png')  */
-      background-position: center;
-    }
+
+
+.chronoBox {
+  background-color: #333;
+  border-radius: 10px;
+  padding: 10px 20px;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.chronoBox span {
+  background-color: rgba(26, 24, 24, 0.612);
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.slider-container {
+  padding-top: 0px;
+  margin-top: -50px; 
+}
+
+img[src='./files/FotoVictor.jpg'] {
+  margin-right: 10px;
+}
+
+.profile-image {
+  width: 70%; 
+  height: auto; 
+  max-height: 300px; 
+  margin-bottom: 10px; 
+}
+
+#scenario {
+  transition: background-image 0.5s ease-in-out;
 }

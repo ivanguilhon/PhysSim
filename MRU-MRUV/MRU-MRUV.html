@@ -1,183 +1,154 @@
 <!DOCTYPE html>
 <html>
 <head>
- <meta name="viewport" content="width=600px, initial-scale=1">
-  <meta charset="utf-8">
-  <title>Lançamento oblíquo</title>
-
-<link rel="stylesheet"  type="text/css" href="./css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="./css/bootstrap-select.min.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-
-<link  href="./css/style.css" rel="stylesheet" >
-
-
-
-<script src="./js/jquery.js"></script>
-<script src="./js/bootstrap.js"></script>
-<script src="./js/bootstrap-select.min.js"></script>
-
-
-
+    <meta name="viewport" content="width=600px, initial-scale=1">
+    <meta charset="utf-8">
+    <title>MRU e MRUV</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link href="./css/style.css" rel="stylesheet">
 </head>
+<body>
+    <!-- Cabeçalho do site -->
+    <header id="header">
+        <div class="container">
+            <div class="row">
+                <div id="site-name">Simulações de Física</div>
+            <div class="row">
+                <div class="col-lg-3">
 
-<header  id="header">
-  <div class="container">
-    <div class="header">
-
-        <div id="site-name" >  Simulações de Física </div> <br>
-        <div id="site-slogan" > LPECT - Laboratório de Pesquisa em Ensino Científico e Tecnológico (ITA) </div>
-    </div> <!-- end of header*/ -->
-  </div>  <!--end of header container*/-->
-
-</header>
-
-
-
-
-
-
-<h2>
-Movimento Retilíneo Uniforme
-</h2>
-
-<div style="width:600px; margin-left:auto; margin-right:auto; position:relative;">
-  <img id="scenario"  class="simScenario" src="./files/scenario3.png" width="100%" height="300px" >
-  <img id="scenario-grid"  class="simScenario" src="./files/scenario3-grid.png" width="100%" height="300px" hidden>
-  
-  <img id="simTarget" src="./files/alvo.png" width="35" height="35" hidden="hidden" >
-  <canvas class="canvas" id="trailCanvas"  width="600" height="300" >
-    Canvas not supported; please update your browser.
-  </canvas>
-  <!--<canvas class="canvas" id="gridCanvas" width="600" height="300" hidden="hidden">
-  Canvas not supported; please update your browser.
-</canvas> -->
-  <canvas class="canvas" id="theCanvas" width="600" height="300">
-  Canvas not supported; please update your browser.
-  </canvas>
-</div> <!--End of Simulation space -->
-
-<div class="container-fluid">
-    <div class="row">
-      <div class="simInput simParamSlider col-sm-4  text-center">
-       Velocidade inicial = <span id="speedReadout">50</span> m/s <input type="range" id="speedSlider" min="0" max="70" step="1" value="50"
-                oninput="showSpeed();" onchange="showSpeed();">
-      </div> <!-- SPEED BUTTON-->
-
-      <div class="simInput simParamSlider col-sm-4 text-center">
-        Ângulo de lançamento = <span id="angleReadout">45</span><sup>o</sup> <input type="range" id="angleSlider" min="0" max="90" step="1" value="45"
-                           oninput="showAngle();" onchange="showAngle();">
-      </div><!-- ANGLE BUTTON-->
-
-      <div class="simInput simParamSlider col-sm-4 text-center">
-        Raio = <span id="radiusReadout">5</span> cm <br><input type="range" id="radiusSlider" min="1" max="30" step="1" value="5"
-                           oninput="showRadius();" onchange="showRadius(); calculateK();">
-      </div><!-- radius BUTTON-->
-
-      <div class="simInput simParamSlider col-sm-4 text-center">
-      Viscosidade=<br><input type="number" id="viscInput" min="0" max="10000"  value="0"  onchange="calculateK(); ">10<sup>-5</sup>Pa.s
-    </div><!-- radius BUTTON-->
-
-    <div class="simInput col-sm-4 text-center">
-      <input type="checkbox" id="boolGrid" name="boolGrid"  value="on" onclick="drawGrid();" >
-    <label for="drawGrid"> Mostrar escala (&#9633; =20m )</label>
-  </div><!-- GRID BUTTON-->
-
-
-  <div class="simInput col-sm-3 text-center">
-      Cor: <select id="trailColors"  onchange="changeColor();" >
-          <option value="black" > Preto </option>
-          <option value="red" >Vermelho</option>
-          <option value="darkgreen" >Verde</option>
-          <option value="blue" >Azul</option>
-      </select>
-  </div><!-- GRID BUTTON-->
-
-
-  <div class="simInput col-12 text-center">
-         <input id="FireButtom" class="customButton Fire" type="button" value="Iniciar movimento"  onclick="fireProjectile();" >
-         <input id="FireButtom" class="customButton Fire" type="button" value="Desenhar"  onclick="drawProjectile(0,0,0);" >
-         <input class="customButton" type="button" value="Limpar"  onclick="clearTrail();" >
-  </div><!-- fire BUTTON-->
-
-
-    </div>    <!--End of row -->
- </div>    <!--End of container -->
-
-
-
-
-
-
-
-
-
-<script  src="./js/MRU-MRUV.js"></script>
-
-
-<!-- collapse INFORMATION  -->
-<p>
-    <!--<button class="btn colapseButton" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAuthor" aria-expanded="false" aria-controls="collapseExample"> -->
-    <button class="btn colapseButton" type="button" >
-      Sobre o autor
-    </button>
-  </p>
-  <div  id="collapseAuthor">
-    <div  class="container-fluid">
-      <div  class="row">
-        <div  class="col-md-8 caption">
-        <p class="texto"> Oi, eu sou o Victor Stein. (inserir mini bio)    
-        </p>
-        <p class="texto"> Minibio do Ivan    
-        </p>
+                </div>
+                <div class="col-lg-9">
+                    <div id="site-slogan">Laboratório de Pesquisa em Ensino Científico e Tecnológico (LPECT)</div>
+                </div>
+                
+            </div>
+                
+         </div>
         
+    </header>
 
+    <h2>Movimento Retilíneo Uniforme e Uniformimente Variado</h2>
 
+    <!-- Espaço de simulação -->
+    <div style="width:600px; margin-left:auto; margin-right:auto; position:relative;">
+        <img id="scenario" class="simScenario" src="./files/PistaCorrida.png" width="100%" height="200px" >
+        <img id="scenario-grid" class="simScenario" src="./files/PistaCorrida-Grid.jpg" width="100%" height="200px" hidden>
+        <canvas class="canvas" id="trailCanvas" width="600" height="300">Canvas not supported; please update your browser.</canvas>
+        <canvas class="canvas" id="theCanvas" width="600" height="300">Canvas not supported; please update your browser.</canvas>
+    </div>
 
+    <!-- Controles da simulação -->
+    <div class="container-fluid slider-container">
+        <div class="row">
+            <!-- Timer e Distância -->
+            <div class="simInput col-sm-4 text-center chronoBox">
+              Tempo decorrido: <span id="timerReadout">0</span> s
+            </div>
+            <div class="simInput col-sm-4 text-center chronoBox">
+              Distância bola Preta: <span id="blackBallDistanceReadout">0</span> m
+            </div>
+            <div class="simInput col-sm-4 text-center chronoBox">
+              Distância bola Cinza: <span id="grayBallDistanceReadout">0</span> m
+            </div>
 
+            <!-- Velocidade inicial da bola Preta -->
+            <div class="simInput simParamSlider col-sm-4  text-center">
+              Velocidade inicial da bola Preta = <span id="blackBallSpeedReadout">50</span> m/s 
+              <input type="range" id="blackBallSpeedSlider" min="0" max="50" step="1" value="50" oninput="showBlackBallSpeed();" onchange="showBlackBallSpeed();">
+            </div>
 
-        <p class="texto"> O autor está envolvido desde 2007 com olimpíadas científicas de Física e atualmente é professor no departamento de Física do ITA.</p>
+            <!-- Velocidade inicial da bola Cinza -->
+            <div class="simInput simParamSlider col-sm-4  text-center">
+              Velocidade inicial da bola Cinza = <span id="grayBallSpeedReadout">50</span> m/s 
+              <input type="range" id="grayBallSpeedSlider" min="0" max="50" step="1" value="50" oninput="showGrayBallSpeed();" onchange="showGrayBallSpeed();">
+            </div>
+
+            <!-- Aceleração inicial da bola Preta -->
+            <div class="simInput simParamSlider col-sm-4  text-center">
+              Aceleração inicial da bola Preta = <span id="blackBallAccelReadout">50</span> m/s^2 
+              <input type="range" id="blackBallAccelSlider" min="0" max="50" step="1" value="50" oninput="showBlackBallAccel();" onchange="showBlackBallAccel();">
+            </div>
+            
+            <!-- <div class="simInput col-sm-4 text-center">
+                Cor: 
+                <select id="trailColors" onchange="changeColor();drawProjectile(x1, x2, y);">
+                    <option value="black"> Preto </option>
+                    <option value="red">Vermelho</option>
+                    <option value="darkgreen">Verde</option>
+                    <option value="blue">Azul</option>
+                </select>
+            </div> -->
+
+            <div class="simInput col-sm-4 text-center">
+                <input type="checkbox" id="boolGrid" onchange="drawGrid();"> Mostrar Grade
+            </div>
+            <div class="simInput col-sm-4 text-center">
+                <input type="checkbox" id="showCenterLines" onchange="drawProjectile(x1, x2, y);"> Mostrar Linhas de Centro
+            </div>
+                
+                
+            
+            
+            <div class="simInput col-12 text-center">
+                <input id="FireButtom" class="customButton Fire" type="button" value="Iniciar movimento" onclick="fireProjectile();">
+                <input id="PauseButtom" class="CustomButton Pause" type="button" value="Pausar/Continuar" onclick="togglePauseSimulation();">
+                <!-- <input class="customButton" type="button" value="Limpar" onclick="clearTrail();"> -->
+                <button id="challengeButton" class="myButtom customButton" onclick="showAnswer()">Desafio</button>
+            </div>
         </div>
+    </div>
 
-        <div  class="col-md-3 justify-content-center text-center">
-          <a  href="www.ivanguilhon.com.br/sobre-o-livro" >
-          <img   src="./files/perfil-sm.png"  height="300px" >
-        </a>
+    <script src="./js/MRU-MRUV.js"></script>
+
+    <!-- Informações sobre o autor -->
+    <p>
+        <button class="btn colapseButton" type="button">Sobre os autores</button>
+    </p>
+    <div id="collapseAuthor">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 caption">
+                  <p class="texto"> Prof. Dr.  Ivan Guilhon</p>
+                  <p class="texto"> Professor no departamento de Física do ITA,
+                     coordenador-geral da IYPT Brasil e coordenador estadual de SP da Olimpíada Brasileira de Física (OBF).
+                    Autor dos livros 'Estudo Eficaz' e 'Física em Nível Olímpico'.                    
+                </p>
+                  <a href="https://www.ivanguilhon.com.br/" target="_blank">
+                    <img width="200px" class="center " src="./files/perfil-sm.png">
+                </a>
+                </div>
+                <div class="col-md-6 caption">                    
+                    <p class="texto"> Minibio do Victor</p>
+                    <p class="texto"> Aluno do Instituto Tecnologico de Aeronáutica e entusiasta por Física.</p>
+                    <a href="">
+                        <img width="200px" src="./files/FotoVictor.jpg">
+                    </a>
+                </div>
+                <div class="col-md-3 justify-content-center text-center">
+                 
+                  
+                </div>  
+            </div>
         </div>
+    </div>
 
-
-
-
-      </div><!-- crow  -->
-</div><!-- collapse content  -->
-  </div> <!-- collapse author  -->
-
-
-
-<!-- FOOTER -->
-<footer class="panel-footer no-padding">
-  <div class="container-fluid no-padding">
-    <div class="row">
-      <section  class="col-sm-4 text-center">
-
-  <div class="text-center caption no-padding" > Simulação desenvolvida para fins de estudo. Comercialização não autorizada.</div>
-
-      </section>
-
-      <section  class="col-sm-4 text-center no-padding">
-        <a class="footer-buttom" href="www.ivanguilhon.com.br" > www.ivanguilhon.com.br</a>
-        </section>
-        <!--<hr class="visible-xs"> -->
-
-
-        <section  class="col-sm-4 text-center no-padding">
-          <a class="footer-buttom" href="https://www.instagram.com/prof.ivanguilhon/">    <img src='./files/instagram.png' height=40px> </a>
-          <a class="footer-buttom" href="https://www.youtube.com/channel/UCP3ih3EY-FGttBFxUIC_mMw">    <img src='./files/youtube.png' height=40px> </a>
-          <a class="footer-buttom" href="https://www.facebook.com/nivel.olimpico/">    <img src='./files/facebook.png' height=40px> </a>
-        </section>
-
-    </div><!--End of row -->
-  </div> <!--End of container -->
-</footer>
+    <!-- Rodapé -->
+    <footer class="panel-footer no-padding">
+        <div class="container-fluid no-padding">
+            <div class="row">
+                <section class="col-sm-4 text-center">
+                    <div class="text-center caption no-padding">Simulação desenvolvida para fins de estudo. Comercialização não autorizada.</div>
+                </section>
+                <section class="col-sm-4 text-center no-padding">
+                    <a class="footer-buttom" href="www.ivanguilhon.com.br"> www.ivanguilhon.com.br</a>
+                </section>
+                <section class="col-sm-4 text-center no-padding">
+                    <a class="footer-buttom" href="https://www.instagram.com/prof.ivanguilhon/"><img src='./files/instagram.png' height=40px></a>
+                    <a class="footer-buttom" href="https://www.youtube.com/channel/UCP3ih3EY-FGttBFxUIC_mMw"><img src='./files/youtube.png' height=40px></a>
+                    <a class="footer-buttom" href="https://www.facebook.com/nivel.olimpico/"><img src='./files/facebook.png' height=40px></a>
+                </section>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
