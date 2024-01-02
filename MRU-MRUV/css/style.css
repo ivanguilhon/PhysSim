@@ -134,7 +134,7 @@ input[type="range"]::-ms-tooltip {
   display: none;
 }
 
-.customButton { 
+.customButton {
   display: inline-block;
   width: 160px;
   height: 40px;
@@ -154,7 +154,7 @@ input[type="range"]::-ms-tooltip {
   background: linear-gradient(#909090,#808080,#808080,#707070);
 }
 
-.myButtom { 
+.myButtom {
   display: inline-block;
   width: 160px;
   height: 40px;
@@ -172,7 +172,7 @@ input[type="range"]::-ms-tooltip {
   height: 40px;
 }
 
-#PauseButtom { 
+#PauseButtom {
   display: inline-block;
   width: 160px;
   height: 40px;
@@ -209,7 +209,7 @@ input[type="range"]::-ms-tooltip {
   color: white;
 }
 
-.colapseButton { 
+.colapseButton {
   display: inline-block;
   background-color: #FACB2F;
   color:#191919;
@@ -219,7 +219,7 @@ input[type="range"]::-ms-tooltip {
   margin-top: 30px;
 }
 
-.colapseButton:hover { 
+.colapseButton:hover {
   display: inline-block;
   background-color: #FACB2F;
   color:#191919;
@@ -229,7 +229,7 @@ input[type="range"]::-ms-tooltip {
   box-shadow: 0 0 2px #191919;
 }
 
-.colapseButton:active { 
+.colapseButton:active {
   display: inline-block;
   background-color: #FACB2F;
   color:#191919;
@@ -248,6 +248,17 @@ input[type="range"]::-ms-tooltip {
 
 #fno1,#fno2, #estudoeficaz {
   height: 200px;
+}
+
+
+a {
+     text-decoration: none;
+     color:#191919;
+}
+a:hover {
+     text-decoration: none;
+     color:black;
+
 }
 
 .panel-footer{
@@ -333,7 +344,7 @@ p {
 
 .slider-container {
   padding-top: 0px;
-  margin-top: -50px; 
+  margin-top: -50px;
 }
 
 img[src='./files/FotoVictor.jpg'] {
@@ -341,10 +352,10 @@ img[src='./files/FotoVictor.jpg'] {
 }
 
 .profile-image {
-  width: 70%; 
-  height: auto; 
-  max-height: 300px; 
-  margin-bottom: 10px; 
+  width: 70%;
+  height: auto;
+  max-height: 300px;
+  margin-bottom: 10px;
 }
 
 #scenario {

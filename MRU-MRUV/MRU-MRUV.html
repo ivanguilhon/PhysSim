@@ -20,11 +20,11 @@
                 <div class="col-lg-9">
                     <div id="site-slogan">Laboratório de Pesquisa em Ensino Científico e Tecnológico (LPECT)</div>
                 </div>
-                
+
             </div>
-                
+
          </div>
-        
+
     </header>
 
     <h2>Movimento Retilíneo Uniforme e Uniformimente Variado</h2>
@@ -53,24 +53,26 @@
 
             <!-- Velocidade inicial da bola Preta -->
             <div class="simInput simParamSlider col-sm-4  text-center">
-              Velocidade inicial da bola Preta = <span id="blackBallSpeedReadout">50</span> m/s 
-              <input type="range" id="blackBallSpeedSlider" min="0" max="50" step="1" value="50" oninput="showBlackBallSpeed();" onchange="showBlackBallSpeed();">
-            </div>
-
-            <!-- Velocidade inicial da bola Cinza -->
-            <div class="simInput simParamSlider col-sm-4  text-center">
-              Velocidade inicial da bola Cinza = <span id="grayBallSpeedReadout">50</span> m/s 
-              <input type="range" id="grayBallSpeedSlider" min="0" max="50" step="1" value="50" oninput="showGrayBallSpeed();" onchange="showGrayBallSpeed();">
+              Velocidade inicial da bola Azul = <span id="blackBallSpeedReadout">10</span> m/s
+              <input type="range" id="blackBallSpeedSlider" min="0" max="50" step="1" value="10" oninput="showBlackBallSpeed();" onchange="showBlackBallSpeed();">
             </div>
 
             <!-- Aceleração inicial da bola Preta -->
             <div class="simInput simParamSlider col-sm-4  text-center">
-              Aceleração inicial da bola Preta = <span id="blackBallAccelReadout">50</span> m/s^2 
-              <input type="range" id="blackBallAccelSlider" min="0" max="50" step="1" value="50" oninput="showBlackBallAccel();" onchange="showBlackBallAccel();">
+              Aceleração inicial da bola Azul = <span id="blackBallAccelReadout">5</span> m/s^2
+              <input type="range" id="blackBallAccelSlider" min="0" max="50" step="1" value="5" oninput="showBlackBallAccel();" onchange="showBlackBallAccel();">
             </div>
-            
+
+            <!-- Velocidade inicial da bola Cinza -->
+            <div class="simInput simParamSlider col-sm-4  text-center">
+              Velocidade inicial da bola Cinza = <span id="grayBallSpeedReadout">30</span> m/s
+              <input type="range" id="grayBallSpeedSlider" min="0" max="50" step="1" value="30" oninput="showGrayBallSpeed();" onchange="showGrayBallSpeed();">
+            </div>
+
+
+
             <!-- <div class="simInput col-sm-4 text-center">
-                Cor: 
+                Cor:
                 <select id="trailColors" onchange="changeColor();drawProjectile(x1, x2, y);">
                     <option value="black"> Preto </option>
                     <option value="red">Vermelho</option>
@@ -85,10 +87,10 @@
             <div class="simInput col-sm-4 text-center">
                 <input type="checkbox" id="showCenterLines" onchange="drawProjectile(x1, x2, y);"> Mostrar Linhas de Centro
             </div>
-                
-                
-            
-            
+
+
+
+
             <div class="simInput col-12 text-center">
                 <input id="FireButtom" class="customButton Fire" type="button" value="Iniciar movimento" onclick="fireProjectile();">
                 <input id="PauseButtom" class="CustomButton Pause" type="button" value="Pausar/Continuar" onclick="togglePauseSimulation();">
@@ -111,23 +113,24 @@
                   <p class="texto"> Prof. Dr.  Ivan Guilhon</p>
                   <p class="texto"> Professor no departamento de Física do ITA,
                      coordenador-geral da IYPT Brasil e coordenador estadual de SP da Olimpíada Brasileira de Física (OBF).
-                    Autor dos livros 'Estudo Eficaz' e 'Física em Nível Olímpico'.                    
+                    Autor dos livros <a href='https://www.ivanguilhon.com.br/estudoEficaz.html '>  'Estudo Eficaz'</a>  e <a href='https://www.ivanguilhon.com.br/FNO.html '> 'Física em Nível Olímpico' </a>.
+                    Representou o Brasil na Olimpíada Internacional de Física (IPhO) no México em 2009.
                 </p>
                   <a href="https://www.ivanguilhon.com.br/" target="_blank">
                     <img width="200px" class="center " src="./files/perfil-sm.png">
                 </a>
                 </div>
-                <div class="col-md-6 caption">                    
-                    <p class="texto"> Minibio do Victor</p>
+                <div class="col-md-6 caption">
+                    <p class="texto ">  Victor Henrique Stein</p>
                     <p class="texto"> Aluno do Instituto Tecnologico de Aeronáutica e entusiasta por Física.</p>
                     <a href="">
                         <img width="200px" src="./files/FotoVictor.jpg">
                     </a>
                 </div>
                 <div class="col-md-3 justify-content-center text-center">
-                 
-                  
-                </div>  
+
+
+                </div>
             </div>
         </div>
     </div>

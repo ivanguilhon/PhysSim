@@ -103,7 +103,7 @@ function drawProjectile(x1, x2, y) {
   theContext.arc(pixelX1, pixelY1, 10, 0, 2 * Math.PI); // Raio aumentado para 10
   //theContext.fillStyle = selectedColor; // Usando a cor selecionada
   var theGradient1 = theContext.createRadialGradient(pixelX1 - 1, pixelY1 - 2, 1, pixelX1, pixelY1, 10);
-  theGradient1.addColorStop(0, "#d0d0d0");
+  theGradient1.addColorStop(0, "#0000dd");
   theGradient1.addColorStop(1, "#000000");
   theContext.fillStyle = theGradient1;
   theContext.fill();
@@ -177,7 +177,7 @@ function clearTrail() {
 // Função para mudar a cor
 function changeColor() {
   //trailContext.fillStyle = document.getElementById("trailColors").value;
- 
+
 }
 
 //Adiciona grade quando marcada
@@ -247,4 +247,3 @@ function showAnswer() {
     sorteio();
   }
 }
-
