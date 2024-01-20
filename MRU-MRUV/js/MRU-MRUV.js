@@ -69,7 +69,7 @@ function fireProjectile() {
 
 // Função para mover o projétil
 function moveProjectile() {
-  if (x1 < 525 && x2 < 525) {  // Verifica a posição de ambas as bolas
+  if (x1 < 435 && x2 < 435) {  // Verifica a posição de ambas as bolas
     if (paused) return; // Se estiver pausado, não faça nada
     contador += 1;
     vx1 += ax1 * dt;
@@ -78,8 +78,11 @@ function moveProjectile() {
     x2 += vx2 * dt + 0.5 * ax2 * dt * dt;
     elapsedTime += dt;
     document.getElementById("timerReadout").innerHTML = elapsedTime.toFixed(2)
-    document.getElementById("blackBallDistanceReadout").innerHTML = Math.round(x1);
-    document.getElementById("grayBallDistanceReadout").innerHTML = Math.round(x2);
+    if(!isChallengeMode){
+      document.getElementById("blackBallDistanceReadout").innerHTML = Math.round(x1);
+      document.getElementById("grayBallDistanceReadout").innerHTML = Math.round(x2);
+    }
+    
 
     drawProjectile(x1, x2, y);
     timer = window.setTimeout(moveProjectile, 10);
@@ -90,10 +93,10 @@ function moveProjectile() {
 
 // Função para desenhar o projétil
 function drawProjectile(x1, x2, y) {
-  var metersPerPixel = 1;
-  var pixelX1 = 35 + x1 / metersPerPixel;
+  var metersPerPixel = 20/22.826;
+  var pixelX1 = 45 + x1 / metersPerPixel;
   var pixelY1 = 220 - y / metersPerPixel;
-  var pixelX2 = 35 + x2 / metersPerPixel;
+  var pixelX2 = 45 + x2 / metersPerPixel;
   var pixelY2 = 220 - (y + 60) / metersPerPixel;
 
   //var selectedColor = document.getElementById("trailColors").value;
@@ -193,10 +196,38 @@ function toggleGrid() {
     scenario.src = "MRU-MRUV\files\PistaCorrida.png";
   }
 }
+
+function mulberry32(a) {
+  return function() {
+    var t = a += 0x6D2B79F5;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  }
+}
+
+function mulberry32(a) { //gerador de números aleatórios. Obs: Math.random() não aceita seed.
+    var t = a += 0x6D2B79F5;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296 ; 
+  
+}
+
+//var d = new Date();
+//var seed = d.getSeconds();
+
+var seed=1;
+
+function changeSeed(){
+  seed=document.getElementById("seed").value ;
+}
+
 function sorteio() {
-  randomVx1 = (Math.random() * 45 + 5).toFixed(2); // Velocidade inicial da bola Preta entre [5,50]
-  randomVx2 = (Math.random() * 45 + 5).toFixed(2); // Velocidade inicial da bola Cinza entre [5,50]
-  randomAx1 = (Math.random() * 10).toFixed(2); // Aceleração da bola Preta entre [0,10]
+  
+  randomVx2 = (mulberry32(seed) * 20 + 20).toFixed(2); // Velocidade inicial da bola Cinza entre [15,40]
+  randomVx1 = (mulberry32(seed+1) * 20 + 5).toFixed(2); // Velocidade inicial da bola Preta entre [5,25]
+  randomAx1 = (mulberry32(seed+2) * 9  + 1).toFixed(2); // Aceleração da bola Preta entre [1,10]
 
   // Desativar sliders e substituir valores por ?
   document.getElementById("blackBallSpeedSlider").disabled = true;
@@ -211,9 +242,16 @@ function sorteio() {
   document.getElementById("blackBallAccelReadout").innerHTML = "?";
   document.getElementById("blackBallAccelSlider").value = 0;
 
+
+  document.getElementById("seed").disabled = true;
+
   // Alterar a cor do botão para verde
   document.getElementById("challengeButton").style.backgroundColor = "green";
   document.getElementById("challengeButton").innerText = "Ver Resposta";
+
+  //Desativar medidas de comprimento
+  document.getElementById("blackBallDistanceReadout").innerHTML = "?";
+  document.getElementById("grayBallDistanceReadout").innerHTML = "?";
 
   isChallengeMode = true;
 }
@@ -221,9 +259,9 @@ function sorteio() {
 function showAnswer() {
   if (isChallengeMode) {
     alert(`Respostas:
-        Velocidade inicial da bola Preta: ${randomVx1}
         Velocidade inicial da bola Cinza: ${randomVx2}
-        Aceleração inicial da bola Preta: ${randomAx1}`);
+        Velocidade inicial da bola Azul: ${randomVx1}        
+        Aceleração inicial da bola Azul: ${randomAx1}`);
 
     // Reativar sliders e mostrar os valores reais
     document.getElementById("blackBallSpeedSlider").disabled = false;
@@ -239,6 +277,8 @@ function showAnswer() {
     document.getElementById("blackBallAccelSlider").value = randomAx1;
 
     // Alterar a cor do botão de volta e o texto
+    document.getElementById("seed").disabled = false;
+
     document.getElementById("challengeButton").style.backgroundColor = "";
     document.getElementById("challengeButton").innerText = "Desafio";
 

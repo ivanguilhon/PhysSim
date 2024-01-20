@@ -51,24 +51,26 @@
               Distância bola Cinza: <span id="grayBallDistanceReadout">0</span> m
             </div>
 
-            <!-- Velocidade inicial da bola Preta -->
-            <div class="simInput simParamSlider col-sm-4  text-center">
-              Velocidade inicial da bola Azul = <span id="blackBallSpeedReadout">10</span> m/s
-              <input type="range" id="blackBallSpeedSlider" min="0" max="50" step="1" value="10" oninput="showBlackBallSpeed();" onchange="showBlackBallSpeed();">
-            </div>
-
-            <!-- Aceleração inicial da bola Preta -->
-            <div class="simInput simParamSlider col-sm-4  text-center">
-              Aceleração inicial da bola Azul = <span id="blackBallAccelReadout">5</span> m/s^2
-              <input type="range" id="blackBallAccelSlider" min="0" max="50" step="1" value="5" oninput="showBlackBallAccel();" onchange="showBlackBallAccel();">
-            </div>
-
-            <!-- Velocidade inicial da bola Cinza -->
+             <!-- Velocidade inicial da bola Cinza -->
             <div class="simInput simParamSlider col-sm-4  text-center">
               Velocidade inicial da bola Cinza = <span id="grayBallSpeedReadout">30</span> m/s
               <input type="range" id="grayBallSpeedSlider" min="0" max="50" step="1" value="30" oninput="showGrayBallSpeed();" onchange="showGrayBallSpeed();">
             </div>
 
+
+            <!-- Velocidade inicial da bola Azul -->
+            <div class="simInput simParamSlider col-sm-4  text-center">
+              Velocidade inicial da bola Azul = <span id="blackBallSpeedReadout">10</span> m/s
+              <input type="range" id="blackBallSpeedSlider" min="0" max="50" step="1" value="10" oninput="showBlackBallSpeed();" onchange="showBlackBallSpeed();">
+            </div>
+
+            <!-- Aceleração inicial da bola Azul -->
+            <div class="simInput simParamSlider col-sm-4  text-center">
+              Aceleração inicial da bola Azul = <span id="blackBallAccelReadout">5</span> m/s^2
+              <input type="range" id="blackBallAccelSlider" min="-5" max="20" step="1" value="5" oninput="showBlackBallAccel();" onchange="showBlackBallAccel();">
+            </div>
+
+       
 
 
             <!-- <div class="simInput col-sm-4 text-center">
@@ -82,11 +84,15 @@
             </div> -->
 
             <div class="simInput col-sm-4 text-center">
-                <input type="checkbox" id="boolGrid" onchange="drawGrid();"> Mostrar Grade
+                <input type="checkbox" id="boolGrid" onchange="drawGrid();"> Mostrar Grade (&#9633; =20m )
             </div>
             <div class="simInput col-sm-4 text-center">
                 <input type="checkbox" id="showCenterLines" onchange="drawProjectile(x1, x2, y);"> Mostrar Linhas de Centro
             </div>
+            <div class="simInput col-sm-4 text-center">
+                Desafio &#35; : <input type="number" id="seed" name="seed" min="1" max="999999" value="1" onchange="changeSeed();"> 
+            </div>
+
 
 
 
@@ -110,9 +116,9 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6 caption">
-                  <p class="texto"> Prof. Dr.  Ivan Guilhon</p>
+                  <p class="texto"> <strong> Prof. Dr.  Ivan Guilhon</strong>  </p>
                   <p class="texto"> Professor no departamento de Física do ITA,
-                     coordenador-geral da IYPT Brasil e coordenador estadual de SP da Olimpíada Brasileira de Física (OBF).
+                     coordenador-geral da IYPT Brasil e coordenador acadêmico das Seletivas das Olimpíadas Internacionais de Física (SOIF), realizadas pela sociedade Brasileira de Física (SBF).
                     Autor dos livros <a href='https://www.ivanguilhon.com.br/estudoEficaz.html '>  'Estudo Eficaz'</a>  e <a href='https://www.ivanguilhon.com.br/FNO.html '> 'Física em Nível Olímpico' </a>.
                     Representou o Brasil na Olimpíada Internacional de Física (IPhO) no México em 2009.
                 </p>
@@ -121,8 +127,8 @@
                 </a>
                 </div>
                 <div class="col-md-6 caption">
-                    <p class="texto ">  Victor Henrique Stein</p>
-                    <p class="texto"> Aluno do Instituto Tecnologico de Aeronáutica e entusiasta por Física.</p>
+                    <p class="texto ">   <strong>Victor Henrique Stein</strong> </p>
+                    <p class="texto"> Aluno do Instituto Tecnologico de Aeronáutica e entusiasta de Física.</p>
                     <a href="">
                         <img width="200px" src="./files/FotoVictor.jpg">
                     </a>
