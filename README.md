@@ -5,7 +5,7 @@
   Add your open source license, GitHub uses Creative Commons Attribution 4.0 International.
 -->
 
-# Introduction to GitHub
+# PhysSim: Simulações computacionais para ensino de física
 
 _Get started using GitHub in less than an hour._
 
