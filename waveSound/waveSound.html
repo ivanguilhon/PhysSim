@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Ondas Sonoras</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h2 { margin-top: 20px; }
+    canvas {
+      background: #fff;
+      border: 1px solid #aaa;
+      margin-top: 20px;
+    }
+    .control-section {
+      display: inline-block;
+      text-align: left;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 15px 25px;
+      margin: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    label {
+      display: inline-block;
+      width: 180px;
+      text-align: right;
+      margin-right: 10px;
+    }
+    input[type="number"] {
+      width: 100px;
+      padding: 3px;
+      margin: 5px;
+      text-align: right;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 14px;
+      background: #1565c0;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover { background: #1976d2; }
+  </style>
+</head>
+
+<body>
+  <h2>Simulador de Ondas Sonoras</h2>
+
+  <canvas id="waveCanvas" width="800" height="400"></canvas>
+  <br> <!-- quebra de linha -->
+
+  <div class="control-section">
+    <h3>Fonte Sonora 1</h3>
+    <div>
+      <label>Amplitude A₁:</label>
+      <input type="number" id="amp1" min="0" max="2" step="0.01" value="1.0">
+    </div>
+    <div>
+      <label>Frequência f₁ (Hz):</label>
+      <input type="number" id="freq1" min="10" max="2000" step="1" value="440">
+    </div>
+    <button onclick="playSound(1)">Tocar Som 1</button>
+  </div>
+
+  <div class="control-section">
+    <h3>Fonte Sonora 2</h3>
+    <div>
+      <label>Amplitude A₂:</label>
+      <input type="number" id="amp2" min="0" max="2" step="0.01" value="1.0">
+    </div>
+    <div>
+      <label>Frequência f₂ (Hz):</label>
+      <input type="number" id="freq2" min="10" max="2000" step="1" value="660">
+    </div>
+    <div>
+      <label>Fase φ₂ (rad):</label>
+      <input type="number" id="phase2" min="0" max="6.283" step="0.1" value="0">
+    </div>
+    <button onclick="playSound(2)">Tocar Som 2</button>
+  </div>
+
+  <div class="control-section">
+    <h3>Outras Configurações</h3>
+    <div>
+      <label>Escala horizontal (xspan):</label>
+      <input type="number" id="xspan" min="1" max="20" step="0.5" value="10">
+    </div>
+    <div>
+      <label>Escala vertical (yspan):</label>
+      <input type="number" id="yspan" min="0.5" max="5" step="0.1" value="1.0">
+    </div>
+    <div>
+      <label>Espaçamento da grade horizontal:</label>
+      <input type="number" id="gridSpacing" min="20" max="100" step="5" value="50"> px
+    </div>
+    <button onclick="playSound(3)">Tocar Combinação</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('waveCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function drawGrid(gridSpacing, xspan, yspan) {
+      const w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Grade horizontal
+      ctx.strokeStyle = "#ddd";
+      ctx.lineWidth = 1;
+      for (let y = h/2; y <= h; y += gridSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+      for (let y = h/2; y >= 0; y -= gridSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Grade vertical
+      for (let x = 0; x <= w; x += gridSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+
+      // Eixos
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, h/2);
+      ctx.lineTo(w, h/2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(50, 0);
+      ctx.lineTo(50, h);
+      ctx.stroke();
+
+      // Escalas
+      ctx.font = "12px Arial";
+      ctx.fillStyle = "#000";
+      for (let i = 1; i <= 5; i++) {
+        ctx.fillText((i * yspan / 5).toFixed(2), 5, h/2 - (i * gridSpacing / 2));
+        ctx.fillText("-" + (i * yspan / 5).toFixed(2), 5, h/2 + (i * gridSpacing / 2));
+      }
+    }
+
+    function plotWave() {
+      const A1 = parseFloat(document.getElementById('amp1').value);
+      const f1 = parseFloat(document.getElementById('freq1').value);
+      const A2 = parseFloat(document.getElementById('amp2').value);
+      const f2 = parseFloat(document.getElementById('freq2').value);
+      const phi2 = parseFloat(document.getElementById('phase2').value);
+      const xspan = parseFloat(document.getElementById('xspan').value);
+      const yspan = parseFloat(document.getElementById('yspan').value);
+      const gridSpacing = parseFloat(document.getElementById('gridSpacing').value);
+
+      drawGrid(gridSpacing, xspan, yspan);
+
+      const w = canvas.width, h = canvas.height;
+      ctx.beginPath();
+      for (let x = 0; x <= w; x++) {
+        const t = (x / w) * xspan;
+        const y = A1 * Math.cos(2 * Math.PI * f1 * t) + A2 * Math.cos(2 * Math.PI * f2 * t + phi2);
+        const plotY = h/2 - (y / yspan) * (h/3);
+        if (x === 0) ctx.moveTo(x, plotY);
+        else ctx.lineTo(x, plotY);
+      }
+      ctx.strokeStyle = "blue";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    function playSound(type) {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const duration = 2.0;
+
+      function createOsc(freq, amp, phase = 0) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.value = freq;
+        gain.gain.value = amp;
+        osc.connect(gain).connect(audioCtx.destination);
+        if (phase !== 0) osc.detune.value = (phase * 180) / Math.PI;
+        return osc;
+      }
+
+      if (type === 1) {
+        const osc = createOsc(freq1.value, amp1.value);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
+      } else if (type === 2) {
+        const osc = createOsc(freq2.value, amp2.value, phase2.value);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
+      } else {
+        const osc1 = createOsc(freq1.value, amp1.value);
+        const osc2 = createOsc(freq2.value, amp2.value, phase2.value);
+        osc1.start(); osc2.start();
+        osc1.stop(audioCtx.currentTime + duration);
+        osc2.stop(audioCtx.currentTime + duration);
+      }
+    }
+
+    // Atualiza o gráfico automaticamente quando qualquer valor muda
+    const inputs = document.querySelectorAll('input[type="number"]');
+    inputs.forEach(input => {
+      input.addEventListener('input', plotWave);
+    });
+
+    // Desenha o gráfico inicial
+    plotWave();
+  </script>
+</body>
+</html>
+
