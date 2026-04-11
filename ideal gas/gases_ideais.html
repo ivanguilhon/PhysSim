@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulação de Gases Ideais</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap');
+
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1f2937;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent2: #f78166;
+      --accent3: #3fb950;
+      --accent4: #d2a8ff;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --heat-color: #ff7b54;
+      --work-color: #58a6ff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+    header .sub { font-size: 0.85rem; color: var(--text-muted); font-family: 'Space Mono', monospace; }
+
+    h2 {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      padding: 20px 0 8px;
+      color: var(--text);
+    }
+
+    .main-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 20px;
+      padding: 16px 24px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* LEFT PANEL */
+    .left-panel { display: flex; flex-direction: column; gap: 16px; }
+
+    /* CANVAS CONTAINER */
+    .canvas-wrap {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      height: 300px;
+    }
+    #gasCanvas { display: block; width: 100%; height: 100%; }
+
+    .canvas-label {
+      position: absolute;
+      top: 10px; left: 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* PARAM GRID */
+    .param-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .param-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .param-card.pressure { border-top: 3px solid #f78166; }
+    .param-card.volume   { border-top: 3px solid #58a6ff; }
+    .param-card.temp     { border-top: 3px solid #ffa657; }
+    .param-card.moles    { border-top: 3px solid #3fb950; }
+
+    .param-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .param-name {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .param-symbol {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .param-value-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .param-input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 5px 8px;
+      text-align: center;
+      width: 80px;
+    }
+    .param-input:focus { outline: none; border-color: var(--accent); }
+    .param-unit {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-family: 'Space Mono', monospace;
+      white-space: nowrap;
+    }
+
+    .param-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .btn-step {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 700;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Mono', monospace;
+    }
+    .btn-step:hover { background: #2d3748; border-color: var(--accent); }
+
+    .lock-label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .lock-label input[type=checkbox] { accent-color: var(--accent4); width: 13px; height: 13px; }
+    .lock-label.locked { color: var(--accent4); font-weight: 700; }
+
+    /* IDEAL GAS INFO */
+    .ideal-gas-display {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .pv-nrt {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .pv-nrt span { color: var(--text); font-weight: 700; }
+    .balance-indicator {
+      font-size: 0.75rem;
+      font-family: 'Space Mono', monospace;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #1a2d1a;
+      color: var(--accent3);
+      border: 1px solid var(--accent3);
+    }
+    .balance-indicator.bad {
+      background: #2d1a1a;
+      color: var(--accent2);
+      border-color: var(--accent2);
+    }
+
+    /* RIGHT PANEL */
+    .right-panel { display: flex; flex-direction: column; gap: 14px; }
+
+    .section-title {
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-family: 'Space Mono', monospace;
+      margin-bottom: 2px;
+    }
+
+    /* TRANSFORMATION */
+    .transform-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .transform-card h3 {
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      margin-bottom: 10px;
+      color: var(--accent4);
+    }
+
+    .transform-type {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .transform-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 7px 4px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+      letter-spacing: 0.5px;
+    }
+    .transform-btn:hover { border-color: var(--accent4); color: var(--accent4); }
+    .transform-btn.active { background: #261f3a; border-color: var(--accent4); color: var(--accent4); }
+
+    .thermo-meters {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .thermo-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .thermo-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      width: 70px;
+      flex-shrink: 0;
+    }
+    .thermo-bar-bg {
+      flex: 1;
+      height: 10px;
+      background: var(--surface2);
+      border-radius: 5px;
+      overflow: visible;
+      position: relative;
+    }
+    .thermo-bar {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.3s, background 0.3s;
+      min-width: 2px;
+    }
+    .thermo-bar.heat { background: var(--heat-color); }
+    .thermo-bar.work { background: var(--work-color); }
+    .thermo-bar.delta-u { background: var(--accent4); }
+    .thermo-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text);
+      width: 60px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .thermo-reset-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 6px;
+    }
+    .btn-reset {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-family: 'Space Mono', monospace;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-reset:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    /* LAW DISPLAY */
+    .law-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .law-card h3 {
+      font-size: 0.9rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+    .law-formula {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text);
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+    .law-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    /* HISTORY */
+    .history-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      flex: 1;
+      min-height: 0;
+    }
+    .history-card h3 {
+      font-size: 0.85rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--accent3);
+    }
+    .history-list {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      max-height: 110px;
+      overflow-y: auto;
+      line-height: 1.7;
+    }
+    .history-list::-webkit-scrollbar { width: 4px; }
+    .history-list::-webkit-scrollbar-track { background: var(--surface2); }
+    .history-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .history-entry { color: var(--text-muted); }
+    .history-entry span { color: var(--text); }
+
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 14px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: 'Space Mono', monospace;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 760px) {
+      .main-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">⚗️ Gases Ideais</div>
+    <div class="sub">Simulação Interativa · Prof. Física</div>
+  </div>
+</header>
+
+<h2>Simulação de Gás Ideal</h2>
+
+<div class="main-layout">
+  <!-- LEFT -->
+  <div class="left-panel">
+
+    <!-- CANVAS -->
+    <div class="canvas-wrap">
+      <div class="canvas-label">Recipiente com gás</div>
+      <canvas id="gasCanvas"></canvas>
+    </div>
+
+    <!-- PV = nRT check -->
+    <div class="ideal-gas-display">
+      <div class="pv-nrt">
+        PV = <span id="pvVal">-</span> &nbsp;|&nbsp; nRT = <span id="nrtVal">-</span>
+      </div>
+      <div class="balance-indicator" id="balanceInd">Equilíbrio ✓</div>
+    </div>
+
+    <!-- PARAMS -->
+    <div class="param-grid">
+
+      <!-- PRESSÃO -->
+      <div class="param-card pressure">
+        <div class="param-header">
+          <span class="param-name">Pressão</span>
+          <span class="param-symbol">P</span>
+        </div>
+        <div class="param-value-row">
+          <input class="param-input" id="pressInput" type="number" min="0.01" max="100" step="0.1" value="1.00">
+          <span class="param-unit">atm</span>
+        </div>
+        <div class="param-controls">
+          <button class="btn-step" onclick="step('P',-1)">−</button>
+          <button class="btn-step" onclick="step('P',+1)">+</button>
+          <label class="lock-label" id="lockLabelP">
+            <input type="checkbox" id="lockP" onchange="updateLockLabel('P')"> Fixo
+          </label>
+        </div>
+      </div>
+
+      <!-- VOLUME -->
+      <div class="param-card volume">
+        <div class="param-header">
+          <span class="param-name">Volume</span>
+          <span class="param-symbol">V</span>
+        </div>
+        <div class="param-value-row">
+          <input class="param-input" id="volInput" type="number" min="0.1" max="200" step="1" value="22.4">
+          <span class="param-unit">L</span>
+        </div>
+        <div class="param-controls">
+          <button class="btn-step" onclick="step('V',-1)">−</button>
+          <button class="btn-step" onclick="step('V',+1)">+</button>
+          <label class="lock-label" id="lockLabelV">
+            <input type="checkbox" id="lockV" onchange="updateLockLabel('V')"> Fixo
+          </label>
+        </div>
+      </div>
+
+      <!-- TEMPERATURA -->
+      <div class="param-card temp">
+        <div class="param-header">
+          <span class="param-name">Temperatura</span>
+          <span class="param-symbol">T</span>
+        </div>
+        <div class="param-value-row">
+          <input class="param-input" id="tempInput" type="number" min="1" max="3000" step="10" value="273">
+          <span class="param-unit">K</span>
+        </div>
+        <div class="param-controls">
+          <button class="btn-step" onclick="step('T',-1)">−</button>
+          <button class="btn-step" onclick="step('T',+1)">+</button>
+          <label class="lock-label" id="lockLabelT">
+            <input type="checkbox" id="lockT" onchange="updateLockLabel('T')"> Fixo
+          </label>
+        </div>
+      </div>
+
+      <!-- MOLES -->
+      <div class="param-card moles">
+        <div class="param-header">
+          <span class="param-name">Qtd. Matéria</span>
+          <span class="param-symbol">n</span>
+        </div>
+        <div class="param-value-row">
+          <input class="param-input" id="molesInput" type="number" min="0.01" max="100" step="0.1" value="1.00">
+          <span class="param-unit">mol</span>
+        </div>
+        <div class="param-controls">
+          <button class="btn-step" onclick="step('n',-1)">−</button>
+          <button class="btn-step" onclick="step('n',+1)">+</button>
+          <label class="lock-label" id="lockLabeln">
+            <input type="checkbox" id="lockn" onchange="updateLockLabel('n')"> Fixo
+          </label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-panel">
+
+    <!-- TRANSFORMATION -->
+    <div class="transform-card">
+      <h3>🔄 Transformação Gasosa</h3>
+      <p class="section-title">Tipo de processo</p>
+      <div class="transform-type">
+        <div class="transform-btn active" id="tBtn-livre" onclick="setTransform('livre')">Livre</div>
+        <div class="transform-btn" id="tBtn-iso" onclick="setTransform('iso')">Isotérmica</div>
+        <div class="transform-btn" id="tBtn-ison" onclick="setTransform('ison')">Isobárica</div>
+        <div class="transform-btn" id="tBtn-isov" onclick="setTransform('isov')">Isocórica</div>
+      </div>
+      <p class="section-title">Energia (desde último reset)</p>
+      <div class="thermo-meters">
+        <div class="thermo-row">
+          <span class="thermo-label">Calor Q</span>
+          <div class="thermo-bar-bg"><div class="thermo-bar heat" id="barQ" style="width:0%"></div></div>
+          <span class="thermo-value" id="valQ">0.0 J</span>
+        </div>
+        <div class="thermo-row">
+          <span class="thermo-label">Trabalho W</span>
+          <div class="thermo-bar-bg"><div class="thermo-bar work" id="barW" style="width:0%"></div></div>
+          <span class="thermo-value" id="valW">0.0 J</span>
+        </div>
+        <div class="thermo-row">
+          <span class="thermo-label">ΔU intern.</span>
+          <div class="thermo-bar-bg"><div class="thermo-bar delta-u" id="barU" style="width:0%"></div></div>
+          <span class="thermo-value" id="valU">0.0 J</span>
+        </div>
+      </div>
+      <div class="thermo-reset-row">
+        <button class="btn-reset" onclick="resetThermo()">⟳ Zerar Q, W, ΔU</button>
+      </div>
+    </div>
+
+    <!-- LAW -->
+    <div class="law-card">
+      <h3>📐 Lei dos Gases Ideais</h3>
+      <div class="law-formula" id="lawFormula">PV = nRT</div>
+      <p class="law-desc" id="lawDesc">Relação entre as quatro grandezas. R = 8,314 J/(mol·K) = 0,08206 atm·L/(mol·K).</p>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="history-card">
+      <h3>📋 Histórico de estados</h3>
+      <div class="history-list" id="historyList">
+        <div class="history-entry">— Estado inicial registrado —</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  Simulação de Física · PV = nRT · R = 0,08206 atm·L/(mol·K)
+</footer>
+
+<script>
+// ─── CONSTANTS ─────────────────────────────────────────────────────────────
+const R = 0.08206; // atm·L/(mol·K)
+const R_J = 8.314; // J/(mol·K)  — for energy calcs
+const Cv = 1.5 * R_J; // monatomic ideal gas
+
+// ─── STATE ────────────────────────────────────────────────────────────────
+let P = 1.00, V = 22.4, T = 273.15, n = 1.00;
+let transformMode = 'livre';
+let totalQ = 0, totalW = 0, totalDU = 0;
+let prevT = T, prevV = V;
+
+// ─── CANVAS SETUP ─────────────────────────────────────────────────────────
+const canvas = document.getElementById('gasCanvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  const wrap = canvas.parentElement;
+  canvas.width = wrap.clientWidth;
+  canvas.height = wrap.clientHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', () => { resizeCanvas(); redistributeParticles(); });
+
+// ─── PARTICLES ────────────────────────────────────────────────────────────
+const BASE_PARTICLES = 40;
+let particles = [];
+
+function particleCount() {
+  return Math.max(8, Math.min(120, Math.round(BASE_PARTICLES * n)));
+}
+
+function speedFactor() {
+  return Math.sqrt(T / 273.15);
+}
+
+function particleRadius() {
+  return Math.max(3, Math.min(10, 5 / Math.cbrt(n)));
+}
+
+function containerBounds() {
+  // Simulate volume as container width ratio
+  const w = canvas.width;
+  const h = canvas.height;
+  const maxW = w - 20;
+  const minW = 60;
+  // V in range 0.1–200 L → container width fraction 0.2–1.0
+  const fraction = 0.2 + 0.8 * Math.min(V / 100, 1.0);
+  const cw = Math.round(minW + (maxW - minW) * fraction);
+  const ch = h - 30;
+  const cx = 10;
+  const cy = 15;
+  return { x: cx, y: cy, w: cw, h: ch };
+}
+
+function createParticle() {
+  const b = containerBounds();
+  const rad = particleRadius();
+  const spd = speedFactor() * (1.5 + Math.random() * 1.5);
+  const angle = Math.random() * 2 * Math.PI;
+  return {
+    x: b.x + rad + Math.random() * (b.w - 2 * rad),
+    y: b.y + rad + Math.random() * (b.h - 2 * rad),
+    vx: spd * Math.cos(angle),
+    vy: spd * Math.sin(angle),
+    hue: 200 + Math.random() * 30
+  };
+}
+
+function redistributeParticles() {
+  const count = particleCount();
+  while (particles.length < count) particles.push(createParticle());
+  while (particles.length > count) particles.pop();
+  // Reposition all within bounds
+  const b = containerBounds();
+  const rad = particleRadius();
+  particles.forEach(p => {
+    p.x = Math.max(b.x + rad, Math.min(b.x + b.w - rad, p.x));
+    p.y = Math.max(b.y + rad, Math.min(b.y + b.h - rad, p.y));
+  });
+}
+
+// Initial particles
+for (let i = 0; i < particleCount(); i++) particles.push(createParticle());
+
+function tempColor(t) {
+  // cold=blue (200), warm=orange(30), hot=red(0)
+  const tRatio = Math.min(Math.max((t - 50) / 1500, 0), 1);
+  const h = Math.round(200 - tRatio * 200);
+  const s = 80 + tRatio * 20;
+  const l = 50 + tRatio * 10;
+  return `hsl(${h},${s}%,${l}%)`;
+}
+
+// ─── ANIMATION LOOP ────────────────────────────────────────────────────────
+function animate() {
+  requestAnimationFrame(animate);
+
+  const b = containerBounds();
+  const rad = particleRadius();
+  const speed = speedFactor();
+  const col = tempColor(T);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw container walls
+  ctx.save();
+  ctx.strokeStyle = '#58a6ff44';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 4]);
+  ctx.strokeRect(b.x, b.y, b.w, b.h);
+  ctx.setLineDash([]);
+  ctx.strokeStyle = '#58a6ff88';
+  ctx.lineWidth = 2;
+  // solid walls except right side showing volume
+  ctx.beginPath();
+  ctx.moveTo(b.x, b.y); ctx.lineTo(b.x, b.y + b.h); // left
+  ctx.moveTo(b.x, b.y + b.h); ctx.lineTo(b.x + b.w, b.y + b.h); // bottom
+  ctx.moveTo(b.x, b.y); ctx.lineTo(b.x + b.w, b.y); // top
+  ctx.stroke();
+  // right wall (piston)
+  ctx.strokeStyle = '#ffa65788';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(b.x + b.w, b.y);
+  ctx.lineTo(b.x + b.w, b.y + b.h);
+  ctx.stroke();
+  // Piston label
+  ctx.fillStyle = '#ffa65799';
+  ctx.font = '10px Space Mono';
+  ctx.fillText('↔ V', b.x + b.w + 4, b.y + b.h/2);
+  ctx.restore();
+
+  // Volume label inside
+  ctx.save();
+  ctx.font = '11px Syne';
+  ctx.fillStyle = '#8b949e88';
+  ctx.fillText(`V = ${V.toFixed(1)} L`, b.x + 6, b.y + b.h - 6);
+  ctx.restore();
+
+  // Update & draw particles
+  const dt = 0.4;
+  particles.forEach(p => {
+    // Gradually adjust speed toward target
+    const currentSpeed = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+    const targetSpeed = speed * 2.5;
+    if (currentSpeed > 0.01) {
+      const factor = 1 + (targetSpeed - currentSpeed) / currentSpeed * 0.05;
+      p.vx *= factor; p.vy *= factor;
+    }
+
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+
+    if (p.x - rad < b.x)        { p.x = b.x + rad;        p.vx = Math.abs(p.vx); }
+    if (p.x + rad > b.x + b.w)  { p.x = b.x + b.w - rad;  p.vx = -Math.abs(p.vx); }
+    if (p.y - rad < b.y)        { p.y = b.y + rad;        p.vy = Math.abs(p.vy); }
+    if (p.y + rad > b.y + b.h)  { p.y = b.y + b.h - rad;  p.vy = -Math.abs(p.vy); }
+
+    // Draw
+    const grad = ctx.createRadialGradient(p.x - rad*0.3, p.y - rad*0.3, rad*0.1, p.x, p.y, rad);
+    grad.addColorStop(0, '#ffffff99');
+    grad.addColorStop(1, col);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, rad, 0, 2*Math.PI);
+    ctx.fillStyle = grad;
+    ctx.fill();
+  });
+}
+animate();
+
+// ─── PARAM CONTROLS ────────────────────────────────────────────────────────
+const steps = { P: 0.1, V: 1.0, T: 10, n: 0.1 };
+const mins  = { P: 0.01, V: 0.1, T: 1,  n: 0.01 };
+const maxs  = { P: 100,  V: 200, T: 3000, n: 100 };
+
+const inputIds = { P: 'pressInput', V: 'volInput', T: 'tempInput', n: 'molesInput' };
+const lockIds  = { P: 'lockP',      V: 'lockV',    T: 'lockT',     n: 'lockn' };
+
+function readInput(param) {
+  return parseFloat(document.getElementById(inputIds[param]).value) || 0;
+}
+function writeInput(param, val) {
+  const decimals = { P: 3, V: 2, T: 1, n: 3 };
+  document.getElementById(inputIds[param]).value = val.toFixed(decimals[param]);
+}
+function isLocked(param) {
+  return document.getElementById(lockIds[param]).checked;
+}
+
+/** Given that `changed` was just set to a new value, find the single free
+ *  variable (not locked, not `changed`) and recalculate it from PV = nRT.
+ *  Returns the name of the recalculated variable, or null if impossible. */
+function enforceGasLaw(changed) {
+  // Build effective lock map (mode locks override checkboxes)
+  const locked = {
+    P: isLocked('P'),
+    V: isLocked('V'),
+    T: isLocked('T'),
+    n: isLocked('n')
+  };
+  if (transformMode === 'iso')  locked.T = true;
+  if (transformMode === 'ison') locked.P = true;
+  if (transformMode === 'isov') locked.V = true;
+
+  // The variable we just changed is NOT considered free for recalculation
+  const free = ['P','V','T','n'].filter(x => x !== changed && !locked[x]);
+
+  if (free.length === 0) {
+    // Nothing can be adjusted — just clamp everything
+    clampAll(); return null;
+  }
+
+  // If exactly one free variable exists, solve for it
+  // If more than one is free, pick the first in preferred priority order
+  // Priority: P → V → T → n  (natural physical intuition)
+  const priority = ['P','V','T','n'];
+  const target = free.sort((a,b) => priority.indexOf(a) - priority.indexOf(b))[0];
+
+  // Solve PV = nRT for `target`
+  if      (target === 'P') P = (n * R * T) / V;
+  else if (target === 'V') V = (n * R * T) / P;
+  else if (target === 'T') T = (P * V) / (n * R);
+  else if (target === 'n') n = (P * V) / (R * T);
+
+  clampAll();
+  return target;
+}
+
+function clampAll() {
+  P = Math.max(mins.P, Math.min(maxs.P, P));
+  V = Math.max(mins.V, Math.min(maxs.V, V));
+  T = Math.max(mins.T, Math.min(maxs.T, T));
+  n = Math.max(mins.n, Math.min(maxs.n, n));
+}
+
+/** Core update: apply a change to `param`, enforce gas law, refresh UI. */
+function applyChange(param, newVal, source) {
+  const old = { P, V, T, n };
+  prevT = T; prevV = V;
+
+  newVal = Math.max(mins[param], Math.min(maxs[param], newVal));
+  if (param === 'P') P = newVal;
+  if (param === 'V') V = newVal;
+  if (param === 'T') T = newVal;
+  if (param === 'n') n = newVal;
+
+  const recalced = enforceGasLaw(param);
+
+  // Write all values back to inputs
+  ['P','V','T','n'].forEach(x => writeInput(x, { P, V, T, n }[x]));
+
+  redistributeParticles();
+  updateDisplay();
+  calcThermo(old);
+  addHistory(param, old, { P, V, T, n });
+}
+
+function step(param, dir) {
+  // Read current state from inputs first
+  P = readInput('P'); V = readInput('V'); T = readInput('T'); n = readInput('n');
+  const current = { P, V, T, n }[param];
+  applyChange(param, current + steps[param] * dir, 'button');
+}
+
+// Listen to direct text-input changes (on blur / Enter)
+['P','V','T','n'].forEach(param => {
+  const el = document.getElementById(inputIds[param]);
+  el.addEventListener('change', () => {
+    // Read all other params from inputs before solving
+    ['P','V','T','n'].forEach(x => {
+      const v = readInput(x);
+      if (x === 'P') P = v;
+      if (x === 'V') V = v;
+      if (x === 'T') T = v;
+      if (x === 'n') n = v;
+    });
+    applyChange(param, readInput(param), 'input');
+  });
+});
+
+// ─── DISPLAY UPDATE ────────────────────────────────────────────────────────
+function updateDisplay() {
+  const pv = (P * V).toFixed(3);
+  const nrt = (n * R * T).toFixed(3);
+  document.getElementById('pvVal').textContent = pv + ' atm·L';
+  document.getElementById('nrtVal').textContent = nrt + ' atm·L';
+  const diff = Math.abs(P*V - n*R*T) / (n*R*T);
+  const ind = document.getElementById('balanceInd');
+  if (diff < 0.01) {
+    ind.textContent = 'Equilíbrio ✓';
+    ind.className = 'balance-indicator';
+  } else {
+    ind.textContent = 'Fora do equilíbrio ✗';
+    ind.className = 'balance-indicator bad';
+  }
+  updateLawDisplay();
+  updateThermoDisplay();
+}
+
+function updateLawDisplay() {
+  const formulas = {
+    livre: 'PV = nRT',
+    iso:   'PV = const  (T fixo)',
+    ison:  'V/T = const  (P fixo)',
+    isov:  'P/T = const  (V fixo)'
+  };
+  const descs = {
+    livre: 'Transformação geral. R = 0,08206 atm·L/(mol·K).',
+    iso:   'Isotérmica: temperatura constante. Trabalho = nRT·ln(V₂/V₁).',
+    ison:  'Isobárica: pressão constante. Trabalho = P·ΔV.',
+    isov:  'Isocórica: volume constante. Trabalho = 0.'
+  };
+  document.getElementById('lawFormula').textContent = formulas[transformMode];
+  document.getElementById('lawDesc').textContent = descs[transformMode];
+}
+
+// ─── THERMODYNAMICS ────────────────────────────────────────────────────────
+function calcThermo(old) {
+  // ΔU = n·Cv·ΔT  (ideal monatomic)
+  const dT = T - old.T;
+  const dV = V - old.V;
+  const dU = n * Cv * dT;
+
+  let W = 0;
+  if (transformMode === 'iso') {
+    W = n * R_J * T * Math.log(V / old.V);
+  } else if (transformMode === 'ison') {
+    // P constant
+    W = P * 101.325 * (V - old.V) * 0.001; // atm→Pa, L→m³ = *0.001 * 101325
+    W = P * (V - old.V) * 101.325;
+  } else if (transformMode === 'isov') {
+    W = 0;
+  } else {
+    // Approximate: W ≈ P_avg * ΔV
+    W = ((P + old.P) / 2) * (V - old.V) * 101.325;
+  }
+
+  const Q = dU + W;
+
+  totalQ  += Q;
+  totalW  += W;
+  totalDU += dU;
+
+  updateThermoDisplay();
+}
+
+const MAX_BAR = 5000; // J scale for bars
+function updateThermoDisplay() {
+  const fmt = v => (v >= 0 ? '+' : '') + v.toFixed(1) + ' J';
+  document.getElementById('valQ').textContent = fmt(totalQ);
+  document.getElementById('valW').textContent = fmt(totalW);
+  document.getElementById('valU').textContent = fmt(totalDU);
+
+  const pct = v => Math.min(100, Math.abs(v) / MAX_BAR * 100).toFixed(1) + '%';
+  document.getElementById('barQ').style.width = pct(totalQ);
+  document.getElementById('barW').style.width = pct(totalW);
+  document.getElementById('barU').style.width = pct(totalDU);
+}
+
+function resetThermo() {
+  totalQ = totalW = totalDU = 0;
+  updateThermoDisplay();
+  addHistoryNote('⟳ Zeram Q, W, ΔU');
+}
+
+// ─── TRANSFORM MODE ────────────────────────────────────────────────────────
+function setTransform(mode) {
+  transformMode = mode;
+  ['livre','iso','ison','isov'].forEach(m => {
+    document.getElementById('tBtn-' + m).classList.toggle('active', m === mode);
+  });
+  // Auto-lock params for transformation
+  document.getElementById('lockT').checked = (mode === 'iso');
+  document.getElementById('lockP').checked = (mode === 'ison');
+  document.getElementById('lockV').checked = (mode === 'isov');
+  ['T','P','V','n'].forEach(x => updateLockLabel(x));
+  updateLawDisplay();
+  addHistoryNote('→ Transformação: ' + mode);
+}
+
+// ─── LOCK LABELS ───────────────────────────────────────────────────────────
+function updateLockLabel(id) {
+  const lbl = document.getElementById('lockLabel' + id);
+  lbl.classList.toggle('locked', document.getElementById('lock' + id).checked);
+}
+
+// ─── HISTORY ───────────────────────────────────────────────────────────────
+let historyEntries = [];
+function addHistory(param, old, cur) {
+  const paramNames = { P: 'Pressão', V: 'Volume', T: 'Temp.', n: 'Moles' };
+  const units = { P: 'atm', V: 'L', T: 'K', n: 'mol' };
+  const vals  = { P: old.P, V: old.V, T: old.T, n: old.n };
+  const vals2 = { P: cur.P, V: cur.V, T: cur.T, n: cur.n };
+  const msg = `${paramNames[param]}: ${vals[param].toFixed(2)} → ${vals2[param].toFixed(2)} ${units[param]}`;
+  historyEntries.unshift(msg);
+  if (historyEntries.length > 20) historyEntries.pop();
+  renderHistory();
+}
+function addHistoryNote(msg) {
+  historyEntries.unshift(msg);
+  if (historyEntries.length > 20) historyEntries.pop();
+  renderHistory();
+}
+function renderHistory() {
+  const el = document.getElementById('historyList');
+  el.innerHTML = historyEntries.map(e =>
+    `<div class="history-entry">${e}</div>`
+  ).join('');
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+updateDisplay();
+</script>
+</body>
+</html>
