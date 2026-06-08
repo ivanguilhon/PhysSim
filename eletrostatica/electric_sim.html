@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Campos Elétricos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #e0e0e0;
+    --panel:     #ffffff;
+    --border:    #bbbbbb;
+    --accent:    #FACB2F;
+    --text:      #191919;
+    --text-dim:  #666666;
+    --pos:       #cc2222;
+    --neg:       #2255cc;
+    --header:    #191919;
+    --canvas-bg: #1a1a1a;
+    --grid-line: rgba(90,90,90,0.5);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    height: 64px;
+    background: var(--header);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    flex-shrink: 0;
+    border-bottom: 3px solid var(--accent);
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--accent);
+    font-size: 1.45rem;
+    font-weight: 700;
+    text-shadow: 1px 1px #000;
+    margin-left: auto;
+    text-align: right;
+    line-height: 1.15;
+  }
+  header .subtitle {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.68rem;
+    color: #aaa;
+    margin-left: auto;
+    text-align: right;
+    letter-spacing: 1px;
+  }
+  .header-text { margin-left: auto; text-align: right; }
+
+  /* ── MAIN LAYOUT ── */
+  .main-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── LEFT PANEL ── */
+  .left-panel {
+    width: 218px;
+    min-width: 218px;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-bottom: 12px;
+    box-shadow: 2px 0 4px rgba(0,0,0,0.08);
+  }
+
+  .section-title {
+    font-size: 0.63rem;
+    font-weight: bold;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 11px 14px 5px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 7px;
+  }
+
+  .divider {
+    height: 1px;
+    background: #e8e8e8;
+    margin: 6px 0;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 14px;
+    gap: 8px;
+  }
+  .control-row label {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+  .control-row input[type=range] {
+    width: 76px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .control-row span {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text);
+    font-weight: bold;
+    min-width: 26px;
+    text-align: right;
+  }
+
+  /* ── CHARGE SIGN BUTTONS ── */
+  .charge-selector {
+    display: flex;
+    gap: 8px;
+    padding: 5px 14px 3px;
+  }
+  .charge-btn {
+    flex: 1;
+    padding: 7px 4px;
+    border: 2px solid;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: bold;
+    transition: all 0.15s;
+    background: linear-gradient(white, #eeeeee, #eeeeee, #e0e0e0);
+    letter-spacing: 1px;
+  }
+  .charge-btn.pos { border-color: var(--pos); color: var(--pos); }
+  .charge-btn.neg { border-color: var(--neg); color: var(--neg); }
+  .charge-btn.pos.active {
+    background: linear-gradient(#ffdddd, #ffbbbb);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .charge-btn.neg.active {
+    background: linear-gradient(#ddeeff, #bbccff);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .charge-btn:hover { border-color: var(--accent); }
+
+  .charge-magnitude {
+    padding: 2px 14px 7px;
+  }
+
+  /* ── MODE / ACTION BUTTONS (site style) ── */
+  .mode-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 3px 14px;
+  }
+
+  .mode-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 7px 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.73rem;
+    font-weight: bold;
+    text-align: left;
+    color: var(--text);
+    background: linear-gradient(white, #eeeeee, #eeeeee, #e0e0e0);
+    border: 1px solid gray;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: border-color 0.15s;
+  }
+  .mode-btn .icon { font-size: 0.95rem; }
+  .mode-btn:hover { border-color: var(--accent); }
+  .mode-btn:active {
+    background: linear-gradient(#909090, #808080, #808080, #707070);
+    color: white;
+  }
+  .mode-btn.active {
+    background: linear-gradient(var(--accent), #e5b200);
+    border-color: #c9a200;
+    color: var(--header);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .mode-btn.danger {
+    color: #c0392b;
+    border-color: #ccc;
+  }
+  .mode-btn.danger:hover { border-color: #c0392b; }
+
+  /* ── PROBE VALUE BOX ── */
+  .probe-value {
+    padding: 7px 10px;
+    background: #f5f5f5;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 3px;
+    margin: 3px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--text);
+    min-height: 42px;
+    line-height: 1.7;
+  }
+
+  /* ── CHARGE LIST ── */
+  .charge-list {
+    padding: 3px 14px;
+    max-height: 150px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .charge-list::-webkit-scrollbar { width: 4px; }
+  .charge-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+
+  .charge-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    background: #fafafa;
+    border: 1px solid #eee;
+    transition: background 0.12s;
+  }
+  .charge-item:hover { background: #f0f0f0; }
+  .charge-item.pos-item { border-left: 3px solid var(--pos); }
+  .charge-item.neg-item { border-left: 3px solid var(--neg); }
+  .charge-item .remove-btn {
+    background: none; border: none; color: #c0392b;
+    cursor: pointer; font-size: 0.85rem; padding: 0 2px;
+    opacity: 0.45; transition: opacity 0.12s;
+  }
+  .charge-item:hover .remove-btn { opacity: 1; }
+
+  /* ── CANVAS AREA ── */
+  .canvas-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #c8c8c8;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 20px,
+      rgba(0,0,0,0.03) 20px, rgba(0,0,0,0.03) 21px
+    );
+    position: relative;
+    overflow: hidden;
+  }
+
+  #simCanvas {
+    border: 2px solid #aaa;
+    cursor: crosshair;
+    display: block;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  }
+
+  /* ── RIGHT PANEL: COLORBAR ── */
+  .right-panel {
+    width: 68px;
+    min-width: 68px;
+    background: var(--panel);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 7px;
+    gap: 7px;
+    box-shadow: -2px 0 4px rgba(0,0,0,0.06);
+  }
+
+  .colormap-label {
+    font-size: 0.58rem;
+    font-weight: bold;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-align: center;
+  }
+
+  #colorbarCanvas {
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+
+  .cb-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.57rem;
+    color: var(--text);
+    text-align: center;
+    font-weight: bold;
+  }
+
+  /* ── STATUS BAR ── */
+  .status-bar {
+    padding: 5px 16px;
+    border-top: 1px solid #bbb;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.61rem;
+    color: #fff;
+    display: flex;
+    gap: 20px;
+    flex-shrink: 0;
+    background: var(--header);
+  }
+  .status-bar span { color: var(--accent); font-weight: bold; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-text">
+    <h1>Campo Elétrico &amp; Potencial</h1>
+    <div class="subtitle">Simulador de distribuição de cargas — unidades SI</div>
+  </div>
+</header>
+
+<div class="main-layout">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+
+    <div class="section-title">Grade</div>
+    <div class="control-row">
+      <label>Células N</label>
+      <input type="range" id="gridN" min="5" max="30" value="15" step="1">
+      <span id="gridNVal">15</span>
+    </div>
+    <div class="control-row">
+      <label>Escala (m)</label>
+      <input type="range" id="scaleR" min="1" max="20" value="5" step="1">
+      <span id="scaleRVal">5</span>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title">Adicionar Carga</div>
+
+    <div class="charge-selector">
+      <button class="charge-btn pos active" id="btnPos" onclick="selectSign(+1)">+q</button>
+      <button class="charge-btn neg" id="btnNeg" onclick="selectSign(-1)">−q</button>
+    </div>
+
+    <div class="charge-magnitude control-row">
+      <label>|q| (nC)</label>
+      <input type="range" id="qMag" min="1" max="100" value="10" step="1">
+      <span id="qMagVal">10</span>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title">Modo Cursor</div>
+
+    <div class="mode-buttons">
+      <button class="mode-btn active" id="modeAdd" onclick="setMode('add')">
+        <span class="icon">✚</span> Adicionar
+      </button>
+      <button class="mode-btn" id="modeErase" onclick="setMode('erase')">
+        <span class="icon">✕</span> Apagar
+      </button>
+      <button class="mode-btn" id="modeProbe" onclick="setMode('probe')">
+        <span class="icon">⊕</span> Ponta de prova
+      </button>
+    </div>
+
+    <div class="probe-value" id="probeDisplay">
+      — clique num ponto —
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title">Visualização</div>
+
+    <div class="mode-buttons">
+      <button class="mode-btn" id="btnField" onclick="toggleField()">
+        <span class="icon">→</span> Campo E
+      </button>
+      <button class="mode-btn" id="btnPotential" onclick="togglePotential()">
+        <span class="icon">◈</span> Potencial V
+      </button>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-title">Cargas (<span id="chargeCount">0</span>)</div>
+
+    <div class="charge-list" id="chargeList"></div>
+
+    <div class="divider"></div>
+    <div class="mode-buttons">
+      <button class="mode-btn danger" onclick="clearAll()">
+        <span class="icon">⊘</span> Limpar tudo
+      </button>
+    </div>
+
+  </div>
+
+  <!-- CANVAS CENTER -->
+  <div class="canvas-area">
+    <canvas id="simCanvas"></canvas>
+  </div>
+
+  <!-- RIGHT PANEL: COLORBAR -->
+  <div class="right-panel">
+    <div class="cb-label" id="cbMax">+V</div>
+    <canvas id="colorbarCanvas" width="28" height="300"></canvas>
+    <div class="cb-label" id="cbMin">−V</div>
+    <div class="colormap-label">Potencial (V)</div>
+  </div>
+
+</div>
+
+<div class="status-bar">
+  <div>Grade: <span id="stGrid">15×15</span></div>
+  <div>Cargas: <span id="stCharges">0</span></div>
+  <div>Modo: <span id="stMode">ADICIONAR</span></div>
+  <div>Cursor: <span id="stCursor">—</span></div>
+</div>
+
+<script>
+// ===== STATE =====
+const canvas = document.getElementById('simCanvas');
+const ctx = canvas.getContext('2d');
+const cbCanvas = document.getElementById('colorbarCanvas');
+const cbCtx = cbCanvas.getContext('2d');
+
+let charges = [];
+let chargeIdCounter = 0;
+
+let mode = 'add';
+let sign = +1;
+let showField = false;
+let showPotential = false;
+
+let N = 15;
+let physScale = 5;
+let cellSize = 40;
+
+const K = 8.9875517923e9;
+
+// ===== INIT =====
+function init() {
+  N = parseInt(document.getElementById('gridN').value);
+  physScale = parseInt(document.getElementById('scaleR').value);
+  const container = document.querySelector('.canvas-area');
+  const maxDim = Math.min(container.clientWidth - 20, container.clientHeight - 20, 720);
+  cellSize = Math.floor(maxDim / N);
+  const sz = cellSize * N;
+  canvas.width = sz;
+  canvas.height = sz;
+  render();
+}
+
+window.addEventListener('resize', () => init());
+
+document.getElementById('gridN').addEventListener('input', function() {
+  N = parseInt(this.value);
+  document.getElementById('gridNVal').textContent = N;
+  document.getElementById('stGrid').textContent = N+'×'+N;
+  charges = charges.filter(c => c.col < N && c.row < N);
+  init();
+  updateChargeList();
+});
+
+document.getElementById('scaleR').addEventListener('input', function() {
+  physScale = parseInt(this.value);
+  document.getElementById('scaleRVal').textContent = physScale;
+  if(showField || showPotential) render();
+});
+
+document.getElementById('qMag').addEventListener('input', function() {
+  document.getElementById('qMagVal').textContent = this.value;
+});
+
+// ===== CANVAS CLICK =====
+canvas.addEventListener('click', function(e) {
+  const rect = canvas.getBoundingClientRect();
+  const px = e.clientX - rect.left;
+  const py = e.clientY - rect.top;
+  const col = Math.floor(px / cellSize);
+  const row = Math.floor(py / cellSize);
+
+  if(col < 0 || col >= N || row < 0 || row >= N) return;
+
+  if(mode === 'add') {
+    const qNano = parseFloat(document.getElementById('qMag').value);
+    const q = sign * qNano * 1e-9;
+    charges = charges.filter(c => !(c.col===col && c.row===row));
+    charges.push({col, row, q, id: chargeIdCounter++});
+    updateChargeList();
+    render();
+  } else if(mode === 'erase') {
+    charges = charges.filter(c => !(c.col===col && c.row===row));
+    updateChargeList();
+    render();
+  } else if(mode === 'probe') {
+    const V = computePotentialAt(col, row);
+    const cx = (col+0.5)*physScale, cy = (row+0.5)*physScale;
+    document.getElementById('probeDisplay').innerHTML =
+      `📍 (${col},${row})<br>V = ${formatSI(V, 'V')}<br>x=${cx.toFixed(1)}m  y=${cy.toFixed(1)}m`;
+    renderWithProbe(col, row);
+  }
+  document.getElementById('stCharges').textContent = charges.length;
+  document.getElementById('chargeCount').textContent = charges.length;
+});
+
+canvas.addEventListener('mousemove', function(e) {
+  const rect = canvas.getBoundingClientRect();
+  const px = e.clientX - rect.left;
+  const py = e.clientY - rect.top;
+  const col = Math.floor(px / cellSize);
+  const row = Math.floor(py / cellSize);
+  if(col >= 0 && col < N && row >= 0 && row < N) {
+    const cx = ((col+0.5)*physScale).toFixed(1);
+    const cy = ((row+0.5)*physScale).toFixed(1);
+    document.getElementById('stCursor').textContent = `(${col},${row}) → ${cx}m, ${cy}m`;
+  } else {
+    document.getElementById('stCursor').textContent = '—';
+  }
+});
+
+// ===== PHYSICS =====
+function cellCenter(col, row) {
+  return {x: (col + 0.5) * physScale, y: (row + 0.5) * physScale};
+}
+
+function computePotentialAt(col, row) {
+  const p = cellCenter(col, row);
+  let V = 0;
+  const rMin = physScale * 0.3;
+  for(const c of charges) {
+    const cp = cellCenter(c.col, c.row);
+    const dx = p.x - cp.x, dy = p.y - cp.y;
+    let r = Math.sqrt(dx*dx + dy*dy);
+    if(r < rMin) r = rMin;
+    V += K * c.q / r;
+  }
+  return V;
+}
+
+function computeFieldAt(col, row) {
+  const p = cellCenter(col, row);
+  let Ex = 0, Ey = 0;
+  const rMin = physScale * 0.3;
+  for(const c of charges) {
+    const cp = cellCenter(c.col, c.row);
+    const dx = p.x - cp.x, dy = p.y - cp.y;
+    let r2 = dx*dx + dy*dy;
+    let r = Math.sqrt(r2);
+    if(r < rMin) { r = rMin; r2 = rMin*rMin; }
+    const Emag = K * c.q / r2;
+    Ex += Emag * dx / r;
+    Ey += Emag * dy / r;
+  }
+  return {Ex, Ey};
+}
+
+// ===== RENDER =====
+function render() { renderWithProbe(null, null); }
+
+function renderWithProbe(probeCol, probeRow) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Dark canvas background
+  ctx.fillStyle = '#1a1a1a';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  if(showPotential && charges.length > 0) {
+    renderPotentialMap();
+  }
+
+  drawGrid();
+
+  if(showField && charges.length > 0) {
+    renderFieldArrows();
+  }
+
+  for(const c of charges) {
+    drawCharge(c);
+  }
+
+  if(probeCol !== null) {
+    drawProbeMarker(probeCol, probeRow);
+  }
+}
+
+function drawGrid() {
+  // Dark gray grid on dark canvas
+  ctx.strokeStyle = 'rgba(90,90,90,0.55)';
+  ctx.lineWidth = 0.5;
+  for(let i = 0; i <= N; i++) {
+    ctx.beginPath();
+    ctx.moveTo(i * cellSize, 0);
+    ctx.lineTo(i * cellSize, canvas.height);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, i * cellSize);
+    ctx.lineTo(canvas.width, i * cellSize);
+    ctx.stroke();
+  }
+}
+
+// ===== POTENTIAL COLORMAP =====
+let vMin = 0, vMax = 0;
+
+function renderPotentialMap() {
+  const V = [];
+  let mn = Infinity, mx = -Infinity;
+  for(let row = 0; row < N; row++) {
+    for(let col = 0; col < N; col++) {
+      const v = computePotentialAt(col, row);
+      V.push(v);
+      if(v < mn) mn = v;
+      if(v > mx) mx = v;
+    }
+  }
+
+  const absMax = Math.max(Math.abs(mn), Math.abs(mx), 1e-10);
+  vMin = -absMax; vMax = absMax;
+
+  for(let row = 0; row < N; row++) {
+    for(let col = 0; col < N; col++) {
+      const v = V[row * N + col];
+      const t = (v - vMin) / (vMax - vMin);
+      ctx.fillStyle = potColor(t, 0.85);
+      ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+    }
+  }
+
+  updateColorbar(vMin, vMax);
+}
+
+function potColor(t, alpha) {
+  // blue (0) → white (0.5) → red (1)
+  let r, g, b;
+  if(t < 0.5) {
+    const s = t * 2;
+    r = Math.round(s * 255);
+    g = Math.round(s * 255);
+    b = 255;
+  } else {
+    const s = (t - 0.5) * 2;
+    r = 255;
+    g = Math.round((1 - s) * 255);
+    b = Math.round((1 - s) * 255);
+  }
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function updateColorbar(vMin, vMax) {
+  const h = cbCanvas.height;
+  const w = cbCanvas.width;
+  for(let y = 0; y < h; y++) {
+    const t = 1 - y/h;
+    cbCtx.fillStyle = potColor(t, 1.0);
+    cbCtx.fillRect(0, y, w, 1);
+  }
+  cbCtx.strokeStyle = 'rgba(255,255,255,0.6)';
+  cbCtx.lineWidth = 1;
+  cbCtx.setLineDash([3,2]);
+  cbCtx.beginPath();
+  cbCtx.moveTo(0, h/2);
+  cbCtx.lineTo(w, h/2);
+  cbCtx.stroke();
+  cbCtx.setLineDash([]);
+
+  document.getElementById('cbMax').textContent = formatSI(vMax, 'V');
+  document.getElementById('cbMin').textContent = formatSI(vMin, 'V');
+}
+
+// ===== FIELD ARROWS =====
+const E_CLAMP = 1e7;
+
+function renderFieldArrows() {
+  const fields = [];
+  let maxMag = 0;
+  for(let row = 0; row < N; row++) {
+    for(let col = 0; col < N; col++) {
+      let {Ex, Ey} = computeFieldAt(col, row);
+      let mag = Math.sqrt(Ex*Ex + Ey*Ey);
+      if(mag > E_CLAMP) { Ex *= E_CLAMP/mag; Ey *= E_CLAMP/mag; mag = E_CLAMP; }
+      fields.push({Ex, Ey, mag});
+      if(mag > maxMag) maxMag = mag;
+    }
+  }
+
+  const arrowMax = cellSize * 0.42;
+
+  for(let row = 0; row < N; row++) {
+    for(let col = 0; col < N; col++) {
+      const {Ex, Ey, mag} = fields[row*N+col];
+      if(mag < 1e-12) continue;
+      const t = mag / maxMag;
+      const len = t * arrowMax;
+      const cx = (col + 0.5) * cellSize;
+      const cy = (row + 0.5) * cellSize;
+      const ux = Ex / mag, uy = Ey / mag;
+
+      // Arrows in golden/amber color to contrast with blue/red potential map
+      const r = Math.round(250);
+      const g = Math.round(160 + 35 * t);
+      const a = 0.35 + 0.65 * t;
+      ctx.strokeStyle = `rgba(${r},${g},20,${a})`;
+      ctx.fillStyle   = `rgba(${r},${g},20,${a})`;
+
+      drawArrow(ctx, cx - ux*len/2, cy - uy*len/2, cx + ux*len/2, cy + uy*len/2, len);
+    }
+  }
+}
+
+function drawArrow(c, x1, y1, x2, y2, len) {
+  const headLen = Math.max(3, len * 0.32);
+  const angle = Math.atan2(y2-y1, x2-x1);
+  c.lineWidth = 1.0;
+  c.beginPath();
+  c.moveTo(x1, y1);
+  c.lineTo(x2, y2);
+  c.stroke();
+  c.beginPath();
+  c.moveTo(x2, y2);
+  c.lineTo(x2 - headLen*Math.cos(angle-0.4), y2 - headLen*Math.sin(angle-0.4));
+  c.lineTo(x2 - headLen*Math.cos(angle+0.4), y2 - headLen*Math.sin(angle+0.4));
+  c.closePath();
+  c.fill();
+}
+
+// ===== DRAW CHARGE =====
+function drawCharge(c) {
+  const cx = (c.col + 0.5) * cellSize;
+  const cy = (c.row + 0.5) * cellSize;
+  const r = Math.min(cellSize * 0.35, 18);
+  const isPos = c.q > 0;
+  const color = isPos ? '#dd2222' : '#2255cc';
+  const glowColor = isPos ? 'rgba(220,50,50,0.55)' : 'rgba(50,100,220,0.55)';
+
+  // Glow halo
+  const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r*2.5);
+  grad.addColorStop(0, glowColor);
+  grad.addColorStop(1, 'transparent');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r*2.5, 0, Math.PI*2);
+  ctx.fill();
+
+  // Circle body
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Symbol
+  ctx.fillStyle = 'white';
+  ctx.font = `bold ${Math.max(10, r*0.9)}px Arial, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(isPos ? '+' : '−', cx, cy);
+
+  // Magnitude label
+  const qNano = (Math.abs(c.q)*1e9).toFixed(0);
+  ctx.font = `${Math.max(7, cellSize*0.2)}px Arial, sans-serif`;
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.fillText(`${qNano}nC`, cx, cy + r + 8);
+}
+
+function drawProbeMarker(col, row) {
+  const cx = (col + 0.5) * cellSize;
+  const cy = (row + 0.5) * cellSize;
+  // Use gold accent for probe marker to match site color
+  ctx.strokeStyle = '#FACB2F';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([3,3]);
+  const s = cellSize * 0.4;
+  ctx.beginPath(); ctx.moveTo(cx-s,cy); ctx.lineTo(cx+s,cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx,cy-s); ctx.lineTo(cx,cy+s); ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(cx, cy, cellSize*0.2, 0, Math.PI*2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+// ===== CONTROLS =====
+function selectSign(s) {
+  sign = s;
+  document.getElementById('btnPos').classList.toggle('active', s === +1);
+  document.getElementById('btnNeg').classList.toggle('active', s === -1);
+}
+
+function setMode(m) {
+  mode = m;
+  ['modeAdd','modeErase','modeProbe'].forEach(id => {
+    document.getElementById(id).classList.remove('active');
+  });
+  document.getElementById('mode' + m.charAt(0).toUpperCase() + m.slice(1)).classList.add('active');
+  document.getElementById('stMode').textContent = m.toUpperCase();
+  if(m !== 'probe') document.getElementById('probeDisplay').innerHTML = '— clique num ponto —';
+  render();
+}
+
+function toggleField() {
+  showField = !showField;
+  document.getElementById('btnField').classList.toggle('active', showField);
+  render();
+}
+
+function togglePotential() {
+  showPotential = !showPotential;
+  document.getElementById('btnPotential').classList.toggle('active', showPotential);
+  render();
+}
+
+function clearAll() {
+  charges = [];
+  showField = false;
+  showPotential = false;
+  document.getElementById('btnField').classList.remove('active');
+  document.getElementById('btnPotential').classList.remove('active');
+  document.getElementById('probeDisplay').innerHTML = '— clique num ponto —';
+  updateChargeList();
+  render();
+}
+
+function removeCharge(id) {
+  charges = charges.filter(c => c.id !== id);
+  updateChargeList();
+  render();
+}
+
+function updateChargeList() {
+  const list = document.getElementById('chargeList');
+  list.innerHTML = '';
+  charges.forEach(c => {
+    const qNano = (c.q * 1e9).toFixed(1);
+    const div = document.createElement('div');
+    div.className = 'charge-item ' + (c.q > 0 ? 'pos-item' : 'neg-item');
+    div.innerHTML = `
+      <span style="color:${c.q>0?'#cc2222':'#2255cc'};font-weight:bold">${c.q>0?'+':''}${qNano}nC</span>
+      <span style="color:#999">(${c.col},${c.row})</span>
+      <button class="remove-btn" onclick="removeCharge(${c.id})">✕</button>
+    `;
+    list.appendChild(div);
+  });
+  document.getElementById('chargeCount').textContent = charges.length;
+  document.getElementById('stCharges').textContent = charges.length;
+}
+
+// ===== UTILS =====
+function formatSI(val, unit) {
+  const a = Math.abs(val);
+  if(a === 0) return `0 ${unit}`;
+  if(a >= 1e9) return `${(val/1e9).toFixed(2)} G${unit}`;
+  if(a >= 1e6) return `${(val/1e6).toFixed(2)} M${unit}`;
+  if(a >= 1e3) return `${(val/1e3).toFixed(2)} k${unit}`;
+  if(a >= 1)   return `${val.toFixed(3)} ${unit}`;
+  if(a >= 1e-3) return `${(val*1e3).toFixed(2)} m${unit}`;
+  if(a >= 1e-6) return `${(val*1e6).toFixed(2)} μ${unit}`;
+  return `${(val*1e9).toFixed(2)} n${unit}`;
+}
+
+// ===== STARTUP =====
+init();
+drawGrid();
+
+const h = cbCanvas.height;
+for(let y = 0; y < h; y++) {
+  const t = 1 - y/h;
+  cbCtx.fillStyle = potColor(t, 1.0);
+  cbCtx.fillRect(0, y, cbCanvas.width, 1);
+}
+document.getElementById('cbMax').textContent = '+V';
+document.getElementById('cbMin').textContent = '−V';
+</script>
+</body>
+</html>

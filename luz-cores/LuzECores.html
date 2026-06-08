@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luz e Cores</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{font-family:Arial,Helvetica,sans-serif;background:#e0e0e0;margin:0;padding:0 0 40px;}
+  .wrap{max-width:780px;margin:0 auto;padding:0 12px;}
+
+  /* ── HEADER ── */
+  #header{height:90px;background:#191919;display:flex;align-items:center;
+          justify-content:flex-end;padding:0 24px;margin-bottom:0;}
+  #site-name{font-family:'Playfair Display',serif;color:#FACB2F;font-size:2em;
+             font-weight:bold;text-shadow:1px 1px #555;line-height:1.1;text-align:right;}
+  #site-slogan{font-family:'Playfair Display',serif;font-size:1em;color:#fff;
+               font-weight:bold;text-align:right;}
+
+  h2{font-family:'Playfair Display',serif;color:#191919;font-size:1.45em;
+     text-align:center;margin:20px 0 14px;}
+
+  /* ── CARDS ── */
+  .card{background:#fff;border:1px solid #bbb;border-radius:4px;
+        padding:14px 16px;margin:12px 0;
+        box-shadow:0 1px 3px rgba(0,0,0,.1);}
+  .card h3{font-family:'Playfair Display',serif;font-size:1em;font-weight:bold;
+           color:#191919;border-bottom:2px solid #FACB2F;padding-bottom:4px;margin:0 0 12px;}
+
+  /* ── CANVAS ── */
+  canvas{display:block;margin:0 auto;border-radius:4px;border:1px solid #aaa;
+         max-width:100%;}
+
+  /* ── MODE BUTTONS ── */
+  .modebar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;justify-content:center;}
+  .modeBtn{
+    flex:1;min-width:140px;height:36px;line-height:34px;font-size:.9em;font-weight:bold;
+    text-align:center;cursor:pointer;user-select:none;
+    background:linear-gradient(white,#eeeeee,#eeeeee,#e0e0e0);
+    border:1px solid #999;border-radius:5px;color:#191919;}
+  .modeBtn:hover{border-color:#FACB2F;}
+  .modeBtn.active{background:linear-gradient(#FACB2F,#e5b200);border-color:#c9a200;color:#191919;}
+  .modeBtn:active{background:linear-gradient(#909090,#707070);}
+
+  /* ── PRESET BUTTONS ── */
+  .presetBtn{
+    flex:1;min-width:140px;height:30px;line-height:28px;font-size:.78em;
+    text-align:center;cursor:pointer;user-select:none;
+    background:linear-gradient(white,#eeeeee,#eeeeee,#e0e0e0);
+    border:1px solid #999;border-radius:4px;color:#191919;}
+  .presetBtn:hover{border-color:#FACB2F;}
+  .presetBtn:active{background:linear-gradient(#909090,#707070);}
+
+  /* ── COLOR COLS ── */
+  .cols{display:flex;gap:16px;flex-wrap:wrap;}
+  .col{flex:1;min-width:200px;}
+  .col b{display:block;margin-bottom:6px;color:#191919;}
+  .swatch{height:44px;border-radius:4px;border:1px solid #bbb;margin-bottom:8px;
+          transition:background .15s;}
+
+  /* ── SLIDERS ── */
+  .row{display:flex;align-items:center;margin:6px 0;}
+  .row label{width:20px;font-weight:bold;font-size:.85em;}
+  .row .R{color:#c00;}.row .G{color:#080;}.row .B{color:#00b;}
+  .row input[type=range]{flex:1;margin:0 8px;height:22px;cursor:pointer;accent-color:#FACB2F;}
+  .row .val{width:32px;text-align:right;font-size:.85em;font-variant-numeric:tabular-nums;}
+
+  /* ── RESULT ── */
+  .result{text-align:center;}
+  .result .swatch{height:64px;max-width:260px;margin:8px auto;}
+  .rgbtxt{font-family:monospace;font-size:1em;margin:2px 0;}
+  .hextxt{font-family:monospace;font-size:.9em;color:#666;}
+
+  /* ── HINT ── */
+  .hint{font-size:.8em;color:#555;line-height:1.55;margin-top:8px;
+        background:#f5f5f5;border:1px solid #ddd;border-radius:3px;padding:8px 10px;}
+
+  /* ── FOOTER ── */
+  footer{height:48px;background:#191919;display:flex;align-items:center;
+         justify-content:center;color:#fff;font-size:.78em;margin-top:24px;text-align:center;}
+
+  /* ── MOBILE ── */
+  @media(max-width:520px){
+    #site-name{font-size:1.5em;}
+    .cols{flex-direction:column;}
+    .col{min-width:unset;}
+    .rgbtxt{font-size:.9em;}
+    canvas{width:100% !important;height:auto !important;}
+  }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div>
+    <div id="site-name">Simulações de Física</div>
+    <div id="site-slogan">por Prof. Ivan Guilhon</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <h2>Luz e Cores: Adição e Subtração</h2>
+
+  <div class="card">
+    <div class="modebar">
+      <div class="modeBtn active" id="btnAdd" onclick="setMode('add')">⊕ Adição &nbsp;(luzes)</div>
+      <div class="modeBtn"        id="btnSub" onclick="setMode('sub')">⊖ Subtração &nbsp;(filtros)</div>
+    </div>
+
+    <canvas id="cv" width="600" height="240"></canvas>
+
+    <div class="cols" style="margin-top:14px;">
+      <div class="col">
+        <b>Cor A</b>
+        <div class="swatch" id="swA"></div>
+        <div class="row"><label class="R">R</label><input type="range" min="0" max="255" value="255" id="aR" oninput="upd()"><span class="val" id="aRv"></span></div>
+        <div class="row"><label class="G">G</label><input type="range" min="0" max="255" value="0"   id="aG" oninput="upd()"><span class="val" id="aGv"></span></div>
+        <div class="row"><label class="B">B</label><input type="range" min="0" max="255" value="0"   id="aB" oninput="upd()"><span class="val" id="aBv"></span></div>
+      </div>
+      <div class="col">
+        <b>Cor B</b>
+        <div class="swatch" id="swB"></div>
+        <div class="row"><label class="R">R</label><input type="range" min="0" max="255" value="0"   id="bR" oninput="upd()"><span class="val" id="bRv"></span></div>
+        <div class="row"><label class="G">G</label><input type="range" min="0" max="255" value="0"   id="bG" oninput="upd()"><span class="val" id="bGv"></span></div>
+        <div class="row"><label class="B">B</label><input type="range" min="0" max="255" value="255" id="bB" oninput="upd()"><span class="val" id="bBv"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card result">
+    <h3>Resultante</h3>
+    <div class="swatch" id="swR"></div>
+    <div class="rgbtxt" id="rgbR"></div>
+    <div class="hextxt" id="hexR"></div>
+    <div class="hint"   id="hint"></div>
+  </div>
+
+  <div class="card">
+    <h3>Presets rápidos</h3>
+    <div class="modebar">
+      <div class="presetBtn" onclick="preset(255,0,0, 0,255,0)">Vermelho + Verde</div>
+      <div class="presetBtn" onclick="preset(0,255,0, 0,0,255)">Verde + Azul</div>
+      <div class="presetBtn" onclick="preset(255,0,0, 0,255,255)">Vermelho + Ciano</div>
+      <div class="presetBtn" onclick="preset(255,255,0, 0,0,255)">Amarelo + Azul</div>
+    </div>
+  </div>
+</div>
+
+<footer>Simulação desenvolvida por Ivan Guilhon para fins de estudo &nbsp;·&nbsp; www.nivelolimpico.com.br</footer>
+
+<script>
+let mode='add';
+const $=id=>document.getElementById(id);
+const cv=$('cv'), ctx=cv.getContext('2d');
+
+function getA(){return[+$('aR').value,+$('aG').value,+$('aB').value];}
+function getB(){return[+$('bR').value,+$('bG').value,+$('bB').value];}
+const css=c=>`rgb(${c[0]},${c[1]},${c[2]})`;
+const hex=c=>'#'+c.map(v=>v.toString(16).padStart(2,'0')).join('').toUpperCase();
+const addColor=(a,b)=>a.map((v,i)=>Math.min(255,v+b[i]));
+const subColor=(a,b)=>a.map((v,i)=>Math.round(v*b[i]/255));
+
+function setMode(m){
+  mode=m;
+  $('btnAdd').classList.toggle('active',m==='add');
+  $('btnSub').classList.toggle('active',m==='sub');
+  upd();
+}
+function preset(ar,ag,ab,br,bg,bb){
+  $('aR').value=ar;$('aG').value=ag;$('aB').value=ab;
+  $('bR').value=br;$('bG').value=bg;$('bB').value=bb;
+  upd();
+}
+
+// ── canvas dimensions (responsive) ──────────────────────────────────────
+function cvW(){return cv.width;}
+function cvH(){return cv.height;}
+
+function draw(a,b,r){
+  const W=cvW(), H=cvH();
+  ctx.clearRect(0,0,W,H);
+
+  if(mode==='add'){
+    // fundo preto, feixes se somam
+    ctx.fillStyle='#111';ctx.fillRect(0,0,W,H);
+    ctx.globalCompositeOperation='lighter';
+    const rx=W*0.37, lx=W*0.63, cy=H/2, rad=Math.min(H*0.40,W*0.22);
+    ctx.fillStyle=css(a);ctx.beginPath();ctx.arc(rx,cy,rad,0,7);ctx.fill();
+    ctx.fillStyle=css(b);ctx.beginPath();ctx.arc(lx,cy,rad,0,7);ctx.fill();
+    ctx.globalCompositeOperation='source-over';
+    // labels
+    ctx.font=`bold ${Math.max(11,H*0.07)}px Arial`;ctx.textAlign='center';
+    ctx.fillStyle='#ccc';
+    ctx.fillText('A',rx,cy+rad+18);
+    ctx.fillText('B',lx,cy+rad+18);
+    ctx.fillText('A+B',(rx+lx)/2,cy-rad-10);
+
+  }else{
+    // filtros em série
+    ctx.fillStyle='#1a1a1a';ctx.fillRect(0,0,W,H);
+    const fh=H*0.55, fy=(H-fh)/2;
+    const fw=W*0.11, gap=W*0.10;
+    const fx1=W*0.28, fx2=fx1+fw+gap;
+    const srcX=W*0.06, srcW=W*0.11;
+    const resX=W*0.66, resW=W*0.28;
+    const lbl=`bold ${Math.max(10,H*0.065)}px Arial`;
+
+    // fonte branca
+    ctx.fillStyle='#fff';ctx.fillRect(srcX,fy,srcW,fh);
+    ctx.font=lbl;ctx.fillStyle='#bbb';ctx.textAlign='center';
+    ctx.fillText('luz',srcX+srcW/2,fy-14);
+    ctx.fillText('branca',srcX+srcW/2,fy-4);
+
+    // feixe branco → filtro A
+    ctx.fillStyle='rgba(255,255,255,0.15)';
+    ctx.fillRect(srcX+srcW,fy+fh*0.3,fx1-(srcX+srcW),fh*0.4);
+
+    // filtro A
+    ctx.globalAlpha=.82;ctx.fillStyle=css(a);
+    ctx.fillRect(fx1,fy,fw,fh);
+    ctx.globalAlpha=1;
+    ctx.font=lbl;ctx.fillStyle='#ddd';ctx.textAlign='center';
+    ctx.fillText('Filtro A',fx1+fw/2,fy-8);
+
+    // feixe A → filtro B
+    const midA=a.map(v=>Math.round(v*0.7));
+    ctx.globalAlpha=.5;ctx.fillStyle=css(midA);
+    ctx.fillRect(fx1+fw,fy+fh*0.3,fx2-(fx1+fw),fh*0.4);
+    ctx.globalAlpha=1;
+
+    // filtro B
+    ctx.globalAlpha=.82;ctx.fillStyle=css(b);
+    ctx.fillRect(fx2,fy,fw,fh);
+    ctx.globalAlpha=1;
+    ctx.fillStyle='#ddd';ctx.fillText('Filtro B',fx2+fw/2,fy-8);
+
+    // feixe resultante
+    ctx.fillStyle=css(r);ctx.fillRect(resX,fy+fh*0.2,resW,fh*0.6);
+    ctx.fillStyle='#ccc';ctx.fillText('Resultante',resX+resW/2,fy+fh*0.2-10);
+  }
+}
+
+function upd(){
+  const a=getA(), b=getB();
+  ['aR','aG','aB','bR','bG','bB'].forEach(id=>$(id+'v').textContent=$(id).value);
+  $('swA').style.background=css(a);
+  $('swB').style.background=css(b);
+  const r=mode==='add'?addColor(a,b):subColor(a,b);
+  $('swR').style.background=css(r);
+  const op=mode==='add'?'+':'×(÷255)';
+  $('rgbR').textContent=`(${a.join(',')}) ${op} (${b.join(',')}) = (${r.join(',')})`;
+  $('hexR').textContent=hex(r);
+  $('hint').innerHTML=mode==='add'
+    ?'<b>Adição (síntese aditiva):</b> os canais R, G e B somam-se, saturando em 255. Ocorre com feixes de luz que se sobrepõem ou com os subpixels de uma tela. R+G+B = branco.'
+    :'<b>Subtração (filtros em série):</b> cada filtro transmite a fração c/255 de cada canal; em série as transmissões se <b>multiplicam</b> (r_A·r_B/255, …). Filtro vermelho + ciano ≈ preto, pois nenhum canal atravessa os dois.';
+  draw(a,b,r);
+}
+
+// canvas responsivo
+function resizeCanvas(){
+  const w=Math.min(600,cv.parentElement.clientWidth-32);
+  cv.width=w; cv.height=Math.round(w*0.4);
+  upd();
+}
+window.addEventListener('resize',resizeCanvas);
+resizeCanvas();
+</script>
+</body>
+</html>
